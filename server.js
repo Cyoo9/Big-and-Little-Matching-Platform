@@ -56,10 +56,11 @@ app.get('/users/logout', (req, res) => {
 });
 
 app.post('/users/register', async (req, res) => {
-    let { name, email, password, password2 } = req.body;
+    let { name, biglittle, email, password, password2 } = req.body;
 
     console.log({
         name,
+        biglittle,
         email,
         password,
         password2
@@ -69,6 +70,9 @@ app.post('/users/register', async (req, res) => {
     if (!name || !email || !password || !password2) {
         errors.push({ message: "Please enter all fields" })
     }
+    //if(biglittle != "Big" || biglittle != "Little") {
+       // errors.push({ message: "Please enter Big or Little"});
+    //}
     if (password.length < 6) {
         errors.push({ message: "Password should be at least 6 characters" });
     }
@@ -98,9 +102,9 @@ app.post('/users/register', async (req, res) => {
                     'SELECT count(*) FROM users'
                 )
                 pool.query(
-                    `INSERT INTO users (name, email, password) 
-                        VALUES ($1, $2, $3) 
-                        RETURNING id, password`, [name, email, hashedPassword],
+                    `INSERT INTO users (name, biglittle, email, password) 
+                        VALUES ($1, $2, $3, $4) 
+                        RETURNING id, password`, [name, biglittle, email, hashedPassword],
                     (err, results) => {
                         if (err) {
                             throw err;
@@ -143,8 +147,6 @@ function checkNotAuthenticated(req, res, next) {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-
 
 
 

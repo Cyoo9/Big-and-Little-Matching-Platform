@@ -49,6 +49,10 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     res.render('dashboard', { user: req.user.name });
 });
 
+app.get('/users/profile', checkAuthenticated, (req, res) => {
+    res.render('profile');
+});
+
 app.get('/users/logout', (req, res) => {
     req.logOut();
     req.flash('success_msg', "You have logged out");
@@ -56,9 +60,9 @@ app.get('/users/logout', (req, res) => {
 });
 
 app.post('/users/register', async (req, res) => {
-    let { name, biglittle, hobbylist, yr, major, email, password, password2 } = req.body;
+    let { name, email, password, password2 } = req.body;
 
-    console.log({
+    /*console.log({
         name,
         biglittle,
         hobbylist,
@@ -67,10 +71,10 @@ app.post('/users/register', async (req, res) => {
         email,
         password,
         password2
-    });
+    });*/
 
     let errors = [];
-    if (!name || !biglittle || !hobbylist || !yr || !major || !email || !password || !password2) {
+    if (!name || !email || !password || !password2) {
         errors.push({ message: "Please enter all fields" })
     }
     //if(biglittle != "Big" || biglittle != "Little") {
@@ -105,9 +109,9 @@ app.post('/users/register', async (req, res) => {
                     'SELECT count(*) FROM users'
                 )
                 pool.query(
-                    `INSERT INTO users (name, biglittle, hobbylist, yr, major, email, password) 
-                        VALUES ($1, $2, $3, $4, $5, $6, $7) 
-                        RETURNING id, password`, [name, biglittle, hobbylist, yr, major, email, hashedPassword],
+                    `INSERT INTO users (name, email, password) 
+                        VALUES ($1, $2, $3) 
+                        RETURNING id, password`, [name, email, hashedPassword],
                     (err, results) => {
                         if (err) {
                             throw err;
@@ -131,6 +135,7 @@ app.post('/users/login',
         failureFlash: true
     })
 );
+
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Set password</h1>
+    <form action="/users/setpassword" method="POST">
+        <div>
+            <input type="password" id="password" name="password" placeholder="password" required/>
+        </div>
+        <div>
+            <input type="password" id="password" name="password2" placeholder="Confirm password" required />
+        </div>
+        <div>
+            <input type="submit" value="Submit" />
+        </div>
+        </form> 
+</body>
+</html>

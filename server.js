@@ -58,7 +58,7 @@ app.get('/users/logout', (req, res) => {
 app.post('/users/register', async (req, res) => {
     let { name, biglittle, hobbylist, yr, major, email, password, password2 } = req.body;
 
-    console.log({
+    /*console.log({
         name,
         biglittle,
         hobbylist,
@@ -67,7 +67,7 @@ app.post('/users/register', async (req, res) => {
         email,
         password,
         password2
-    });
+    });*/
 
     let errors = [];
     if (!name || !biglittle || !hobbylist || !yr || !major || !email || !password || !password2) {

@@ -1,5 +1,3 @@
-//import { google } from 'googleapis';
-
 const express = require('express');
 const app = express();
 const { pool } = require("./dbConfig");
@@ -49,7 +47,7 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     res.render('dashboard', { user: req.user.name });
 });
 
-app.get('/users/profile', checkAuthenticated, (req, res) => {
+app.get('/users/profile', checkNotAuthenticated, (req, res) => {
     res.render('profile');
 });
 
@@ -195,8 +193,8 @@ passport2.use(new GoogleStrategy({
         var email = userProfile.emails[0].value;
         userProfile.id = 100;//dont remove need it
 
-        console.log(userProfile.id);//
-        console.log(token);//
+        console.log(userProfile.id);//comment this out when finished
+        console.log(token);//comment this out when finished
 
         pool.query(
             `SELECT * FROM users 
@@ -240,5 +238,6 @@ app.get('/auth/google/callback',
         // Successful authentication, redirect success.
         console.log("Successful Google Login");
         res.redirect('/googleusers/dashboard');
-    });
-    /*End of Google Auth */
+});
+
+/*End of Google Auth */

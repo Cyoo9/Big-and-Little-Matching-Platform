@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require("passport");
+var isNewUser = false;
 
 const initializePassport = require('./passportConfig')
 
@@ -170,6 +171,10 @@ app.get('/googleusers/dashboard', (req, res) => {
 
 app.get('/', (req, res) => res.send("error logging in"));
 
+app.get('/users/setpw', checkNotAuthenticated, (req, res) => {
+    res.render('setpw');
+});
+
 passport2.serializeUser(function (user, cb) {
     cb(null, user);
 });
@@ -205,8 +210,10 @@ passport2.use(new GoogleStrategy({
             console.log(results.rows);
 
             if (results.rows.length > 0) {
+                isNewUser = false;
                 return done(null, userProfile);
             } else {
+                isNewUser = true;
                 pool.query(
                     'SELECT count(*) FROM users'
                 )
@@ -237,7 +244,63 @@ app.get('/auth/google/callback',
     function (req, res) {
         // Successful authentication, redirect success.
         console.log("Successful Google Login");
-        res.redirect('/googleusers/dashboard');
+        if(isNewUser == true) {
+            res.redirect('/users/setpw');
+        }
+        else {
+            res.redirect('/googleusers/dashboard');
+        }
+});
+
+app.post('/users/setpassword', async (req, res) => {
+    var name = userProfile.displayName;
+    var email = userProfile.emails[0].value;
+    let { password, password2 } = req.body;
+
+    let errors = [];
+    if (!password || !password2) {
+        errors.push({ message: "Please enter all fields" })
+    }
+    if (password.length < 6) {
+        errors.push({ message: "Password should be at least 6 characters" });
+    }
+    if (password != password2) {
+        errors.push({ message: "Passwords do not match" });
+    }
+    if (errors.length > 0) {
+        res.render('setpw', { errors });
+    } else {
+        //Form validation has passed 
+        let hashedPassword = await bcrypt.hash(password, 10);
+        console.log(hashedPassword);
+
+        pool.query(
+            `SELECT * FROM users 
+            WHERE email = $1`, [email], (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.log(results.rows);
+
+            if (results.rows.length > 0) {
+                //change pw with sql here since acc is found
+                pool.query(
+                    'UPDATE users SET password = ($1);', [hashedPassword],
+                    (err, results) => {
+                        if (err) {
+                            throw err;
+                        }
+
+                        console.log(results.rows);
+                        req.flash('success_msg', "Password successfully set.");
+                        res.redirect('/googleusers/dashboard');
+                    }
+                )
+
+            } 
+        }
+        );
+    }
 });
 
 /*End of Google Auth */

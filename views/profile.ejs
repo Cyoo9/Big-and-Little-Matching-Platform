@@ -13,20 +13,63 @@
 
     <h1>Profile</h1>
 
-    <form action="/users/profile" method="POST">
         <div>
-            <input type="text" id="name" name="name" placeholder="Edit Name" required />
+            <h1>Name: <%= name%></h1>
         </div>
         <div>
-            <input type="email" id="email" name="email" placeholder="Edit Email" required />
+            <h1>Big/Little: <%= biglittle%></h1>
         </div>
         <div>
-            <input type="password" id="password" name="password" placeholder="Change password" required />
+            <h1>Hobbies: <%= hobbylist%>
+            </h1>
         </div>
         <div>
-            <input type="submit" value="Save" />
+            <h1>Year: <%= yr%>
+            </h1>
         </div>
-    </form>
+        <div>
+            <h1>Major: <%= major%>
+            </h1>
+        </div>
+        <div>
+            <h1>Email: <%= email    %>
+            </h1>
+        </div>
+        <form action="/users/profile/changeinfo" method="POST">
+            <div>
+                <input type="text" id="name" name="name" placeholder="Change Name" required />
+            </div>
+            <div>
+                <input type="password" id="password" name="password" placeholder="Change Password" required />
+            </div>
+            <div>
+                <input type="text" id="biglittle" name="biglittle" placeholder="Change Big/Little" required />
+            </div>
+            <div>
+                <input type="text" id="hobbies" name="hobbies" placeholder="Change Hobbies" required />
+            </div>
+            <div>
+                <input type="text" id="year" name="year" placeholder="Change Year" required />
+            </div>
+            <div>
+                <input type="text" id="major" name="major" placeholder="Change Major" required />
+            </div>  
+            <div>
+                <input type="text" id="email" name="email" placeholder="Change Email" required />
+            </div>
+            <div>
+                <input type="submit" value="Save" />
+            </div>
+        </form>
+    <ul>
+        <% if(typeof errors !='undefined' ) { %>
+            <% errors.forEach(error=>{ %>
+                <li>
+                <%= error.message %>
+                </li>
+            <% }) %>
+        <% } %>
+    </ul>
 </body>
 
 </html>

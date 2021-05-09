@@ -49,7 +49,13 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
 });
 
 app.get('/users/profile', checkNotAuthenticated, (req, res) => {
-    res.render('profile');
+    res.render('profile', { name: req.user.name, 
+                            biglittle: req.user.biglittle,
+                            hobbylist: req.user.hobbylist,
+                            yr: req.user.yr,
+                            major: req.user.major,
+                            email: req.user.email
+                          });
 });
 
 app.get('/users/logout', (req, res) => {
@@ -58,6 +64,52 @@ app.get('/users/logout', (req, res) => {
     res.redirect('/users/login');
 });
 
+app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) => {
+    let { name, password, biglittle, hobbies, year, major, email } = req.body;
+    let hashedPassword = await bcrypt.hash(password, 10);
+    let errors = [];
+
+    if(biglittle != "Big" && biglittle != "Little") {
+        errors.push({ message: "Please enter Big or Little" })
+        res.render('profile', { errors });
+    }
+    /*pool.query(
+        `SELECT * FROM users 
+        WHERE email = $1`, [email], (err, results) => {
+            if (err) {
+                throw err;
+            }
+            //console.log(results.rows);
+
+            if (results.rows.length > 0) {
+                errors.push({ message: "email already registered" });
+                res.render('profile', { errors });
+            }
+        }
+    )*/
+
+    else { 
+        pool.query(
+        `UPDATE users
+         SET 
+            name = $1, 
+            biglittle = $2, 
+            hobbylist = $3, 
+            yr = $4, 
+            major = $5, 
+            email = $6, 
+            password = $7;
+            `, [name, biglittle, hobbies, year, major, email, hashedPassword], (err, results) => {
+                if (err) {
+                    throw err;
+                }
+                //console.log(results.rows);
+                req.flash('success_msg', "Profile change complete!");
+                res.redirect('/users/dashboard');
+            }
+        )
+    }
+})
 app.post('/users/register', async (req, res) => {
     let { name, email, password, password2 } = req.body;
 

@@ -53,7 +53,6 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
 
 app.get('/users/profile', checkNotAuthenticated, (req, res) => {
 
-
     if(googleUser == true) {
         pool.query(
             `SELECT * FROM users 
@@ -80,15 +79,6 @@ app.get('/users/profile', checkNotAuthenticated, (req, res) => {
             email: req.user.email
           });
     }
-
-    res.render('profile', { name: req.user.name, 
-                            biglittle: req.user.biglittle,
-                            hobbylist: req.user.hobbylist,
-                            yr: req.user.yr,
-                            major: req.user.major,
-                            email: req.user.email
-                          });
-
 });
 
 app.get('/users/logout', (req, res) => {
@@ -114,14 +104,12 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
                 throw err;
             }
             //console.log(results.rows);
-
             if (results.rows.length > 0) {
                 errors.push({ message: "email already registered" });
                 res.render('profile', { errors });
             }
         }
     )*/
-
 
     var tempEmail;
     if(googleUser == true) {
@@ -139,10 +127,6 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
             }
         );
     }
-
-
-    else { 
-
         pool.query(
         `UPDATE users
          SET 
@@ -152,20 +136,14 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
             yr = $4, 
             major = $5, 
             email = $6, 
-
             password = $7
             WHERE email = $8;
             `, [name, biglittle, hobbies, year, major, email, hashedPassword, tempEmail], (err, results) => {
-
-            password = $7;
-            `, [name, biglittle, hobbies, year, major, email, hashedPassword], (err, results) => {
-
                 if (err) {
                     throw err;
                 }
                 //console.log(results.rows);
                 req.flash('success_msg', "Profile change complete!");
-
                 if(googleUser == true) {
                     userProfile.emails[0].value = email;
                     res.redirect('/googleusers/dashboard');
@@ -176,13 +154,6 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
             }
         )
 });
-
-
-                res.redirect('/users/dashboard');
-            }
-        )
-    }
-})
 
 app.post('/users/register', async (req, res) => {
     let { name, email, password, password2 } = req.body;
@@ -434,7 +405,6 @@ app.post('/users/setpassword', async (req, res) => {
                         res.redirect('/googleusers/dashboard');
                     }
                 )
-
             } 
             }
         );

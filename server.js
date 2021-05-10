@@ -127,7 +127,6 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
             }
         );
     }
-
         pool.query(
         `UPDATE users
          SET 
@@ -406,7 +405,6 @@ app.post('/users/setpassword', async (req, res) => {
                         res.redirect('/googleusers/dashboard');
                     }
                 )
-
             } 
             }
         );

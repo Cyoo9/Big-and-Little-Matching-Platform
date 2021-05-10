@@ -5,7 +5,9 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require("passport");
+var User;
 var isNewUser = false;
+var googleUser = false;
 
 const initializePassport = require('./passportConfig')
 
@@ -45,17 +47,113 @@ app.get('/users/register', checkAuthenticated, (req, res) => {
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
+    User = req.user;
     res.render('dashboard', { user: req.user.name });
 });
 
 app.get('/users/profile', checkNotAuthenticated, (req, res) => {
-    res.render('profile');
+
+    if(googleUser == true) {
+        pool.query(
+            `SELECT * FROM users 
+            WHERE email = $1`, [userProfile.emails[0].value], function (err, results) {
+            if (err) {
+                throw err;
+            }
+            res.render('profile', { name: results.rows[0].name, 
+                biglittle: results.rows[0].biglittle,
+                hobbylist: results.rows[0].hobbylist,
+                yr: results.rows[0].yr,
+                major: results.rows[0].major,
+                email: results.rows[0].email
+              });
+        }
+        );
+    }
+    else {
+        res.render('profile', { name: req.user.name, 
+            biglittle: req.user.biglittle,
+            hobbylist: req.user.hobbylist,
+            yr: req.user.yr,
+            major: req.user.major,
+            email: req.user.email
+          });
+    }
 });
 
 app.get('/users/logout', (req, res) => {
+    googleUser = false;
     req.logOut();
     req.flash('success_msg', "You have logged out");
     res.redirect('/users/login');
+});
+
+app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) => {
+    let { name, password, biglittle, hobbies, year, major, email } = req.body;
+    let hashedPassword = await bcrypt.hash(password, 10);
+    let errors = [];
+
+    if(biglittle != "Big" && biglittle != "Little") {
+        errors.push({ message: "Please enter Big or Little" })
+        res.render('profile', { errors });
+    }
+    /*pool.query(
+        `SELECT * FROM users 
+        WHERE email = $1`, [email], (err, results) => {
+            if (err) {
+                throw err;
+            }
+            //console.log(results.rows);
+            if (results.rows.length > 0) {
+                errors.push({ message: "email already registered" });
+                res.render('profile', { errors });
+            }
+        }
+    )*/
+
+    var tempEmail;
+    if(googleUser == true) {
+        tempEmail = userProfile.emails[0].value;
+    }
+    if(googleUser == false) {
+        tempEmail = User.email;
+    }
+    if(tempEmail != email) {
+        pool.query(
+            'UPDATE users SET external_id = 0 WHERE email = $1;', [tempEmail], (err, results) => {
+                if (err) {
+                    throw err;
+                }
+            }
+        );
+    }
+
+        pool.query(
+        `UPDATE users
+         SET 
+            name = $1, 
+            biglittle = $2, 
+            hobbylist = $3, 
+            yr = $4, 
+            major = $5, 
+            email = $6, 
+            password = $7
+            WHERE email = $8;
+            `, [name, biglittle, hobbies, year, major, email, hashedPassword, tempEmail], (err, results) => {
+                if (err) {
+                    throw err;
+                }
+                //console.log(results.rows);
+                req.flash('success_msg', "Profile change complete!");
+                if(googleUser == true) {
+                    userProfile.emails[0].value = email;
+                    res.redirect('/googleusers/dashboard');
+                }
+                else {
+                    res.redirect('/users/dashboard');
+                }
+            }
+        )
 });
 
 app.post('/users/register', async (req, res) => {
@@ -166,7 +264,17 @@ app.use(passport2.initialize());
 app.use(passport2.session());
 
 app.get('/googleusers/dashboard', (req, res) => {
-    res.render('dashboard', { user: userProfile.displayName });
+
+    pool.query(
+        `SELECT * FROM users 
+        WHERE email = $1`, [userProfile.emails[0].value], function (err, results) {
+        if (err) {
+            throw err;
+        }
+        console.log(results.rows);
+        res.render('dashboard', {user: results.rows[0].name});
+    }
+    );
 });
 
 app.get('/', (req, res) => res.send("error logging in"));
@@ -184,6 +292,7 @@ passport2.deserializeUser(function (obj, cb) {
 });
 
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const { google } = require('googleapis');
 const GOOGLE_CLIENT_ID = "278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = "q0ij5zfoUX-QeJx3QfbX9fYw";
 passport2.use(new GoogleStrategy({
@@ -244,6 +353,7 @@ app.get('/auth/google/callback',
     function (req, res) {
         // Successful authentication, redirect success.
         console.log("Successful Google Login");
+        googleUser = true;
         if(isNewUser == true) {
             res.redirect('/users/setpw');
         }
@@ -285,7 +395,7 @@ app.post('/users/setpassword', async (req, res) => {
             if (results.rows.length > 0) {
                 //change pw with sql here since acc is found
                 pool.query(
-                    'UPDATE users SET password = ($1);', [hashedPassword],
+                    'UPDATE users SET password = $2 WHERE email = $1 ;', [email, hashedPassword],
                     (err, results) => {
                         if (err) {
                             throw err;
@@ -298,7 +408,7 @@ app.post('/users/setpassword', async (req, res) => {
                 )
 
             } 
-        }
+            }
         );
     }
 });

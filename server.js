@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require("passport");
+
 var User;
 var isNewUser = false;
 var googleUser = false;
@@ -412,3 +413,58 @@ app.post('/users/setpassword', async (req, res) => {
 });
 
 /*End of Google Auth */
+
+
+
+
+
+
+
+
+/*Start of search feature*/
+//searches and filters users based on name/username
+
+
+app.get('/search',async function(req,res){
+
+    const {keyword} = req.query;
+
+    console.log(req.query);
+
+    pool.query (
+        'SELECT name, biglittle, hobbylist, yr, major, email from USERS WHERE name LIKE $1;', ['%'+keyword+'%'], 
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.log("===Result of users:===");
+            console.log(results.rows);
+            console.log("===End of Results===");
+            res.render('searchresults', {
+                userData: results.rows
+            });
+        }
+    )
+})
+
+app.get('/showuser', function(req, res) {
+    console.log("Showing user info...");
+
+    pool.query (
+        'SELECT name, biglittle, hobbylist, yr, major, email from USERS WHERE email = $1;', [req.query.prof], 
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.log("===Result of users:===");
+            console.log(results.rows);
+            console.log("===End of Results===");
+            res.render('displaySearchedUser', {
+                userData: results.rows
+            });
+        }
+    )
+
+})
+
+/*End of search feature*/

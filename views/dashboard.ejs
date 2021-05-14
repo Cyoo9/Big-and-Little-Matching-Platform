@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-signin-client_id" content="278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com">
+    <script src="server.js"></script>
+    <script src="main.js"></script>
 
     <title>Document</title>
 </head>
@@ -17,6 +19,13 @@
 
     <a href="/users/profile">Profile</a>
 
-    
+    <!--SEARCH BAR-->
+    <form action="/search" method="GET" class="form-inline" id="search-form">
+        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input type="submit" class="btn btn-primary" value="Search">
+        <div class="searchBox">
+        </div>
+      </form>
+
 </body>
 </html>

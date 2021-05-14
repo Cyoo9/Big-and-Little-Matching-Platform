@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com">
+    <script src="server.js"></script>
+    <script src="main.js"></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <h1>THIS IS WHERE THE USER PROFILE IS DISPLAYED FROM THE SEARCH</h1>
+    <!--SEARCH BAR-->
+    <form action="/search" method="GET" class="form-inline" id="search-form">
+        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input type="submit" class="btn btn-primary" value="Search">
+        <div class="searchBox">
+        </div>
+      </form>
+
+    <div class="userinfo-table">
+  <% if(userData.length != 0) {
+    var i = 1;
+    userData.forEach(function(data) {
+        %>
+    <ul>
+        <div class="userinfo-container">
+                <div class="userinfo-name">Name: <%=data.name%></div>
+                <div class="userinfo-biglittle"><%=data.biglittle%></div>
+                <div class ="userinfo-hobbylist">Hobbies: <%=data.hobbylist%></div>
+                <div class ="userinfo-yr">Year: <%=data.yr%></div>
+                <div class ="userinfo-major">Major: <%=data.major%></div>
+        </div>
+    </ul> 
+    <% i++;}) %> 
+    <% }%>
+    </div>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ const passport = require("passport");
 var User;
 var isNewUser = false;
 var googleUser = false;
+var sessionpw;
 
 const initializePassport = require('./passportConfig')
 
@@ -50,6 +51,9 @@ app.get('/users/register', checkAuthenticated, (req, res) => {
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     User = req.user;
     res.render('dashboard', { user: req.user.name });
+    username = req.user.name; 
+    major = req.user.major;
+    year = req.user.yr;
 });
 
 app.get('/users/profile', checkNotAuthenticated, (req, res) => {
@@ -80,6 +84,7 @@ app.get('/users/profile', checkNotAuthenticated, (req, res) => {
             email: req.user.email
           });
     }
+
 });
 
 app.get('/users/logout', (req, res) => {
@@ -90,15 +95,33 @@ app.get('/users/logout', (req, res) => {
 });
 
 app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) => {
-    let { name, password, biglittle, hobbies, year, major, email } = req.body;
-    let hashedPassword = await bcrypt.hash(password, 10);
-    let errors = [];
+    let name, hashedPassword, biglittle, hobbies, year, major, email;
+
+    if(req.body.name != "") name = req.body.name;
+    else name = req.user.name;
+    if(req.body.biglittle != "")  biglittle = req.body.biglittle; 
+    else biglittle = req.user.biglittle 
+    if(req.body.hobbies != "") hobbies = req.body.hobbies; 
+    else hobbies = req.user.hobbies;
+    if(req.body.year != "") year = req.body.year; 
+    else year = req.user.year;
+    if(req.body.major != "") major = req.body.major;
+    else major = req.user.major;
+    if(req.body.email != "") email = req.body.email; 
+    else email = req.user.email;
+    if(req.body.password != "") hashedPassword = await bcrypt.hash(req.body.password, 10);
+    else hashedPassword = req.user.password; 
+
+    /*let errors = [];
 
     if(biglittle != "Big" && biglittle != "Little") {
         errors.push({ message: "Please enter Big or Little" })
-        res.render('profile', { errors });
+        res.render('profile', { 
+            name: name;
+            errors });
     }
-    /*pool.query(
+    
+    pool.query(
         `SELECT * FROM users 
         WHERE email = $1`, [email], (err, results) => {
             if (err) {
@@ -174,9 +197,7 @@ app.post('/users/register', async (req, res) => {
     if (!name || !email || !password || !password2) {
         errors.push({ message: "Please enter all fields" })
     }
-    //if(biglittle != "Big" || biglittle != "Little") {
-       // errors.push({ message: "Please enter Big or Little"});
-    //}
+
     if (password.length < 6) {
         errors.push({ message: "Password should be at least 6 characters" });
     }
@@ -382,6 +403,7 @@ app.post('/users/setpassword', async (req, res) => {
     } else {
         //Form validation has passed 
         let hashedPassword = await bcrypt.hash(password, 10);
+        sessionpw = hashedPassword;
         console.log(hashedPassword);
 
         pool.query(
@@ -415,24 +437,18 @@ app.post('/users/setpassword', async (req, res) => {
 /*End of Google Auth */
 
 
-
-
-
-
-
-
 /*Start of search feature*/
 //searches and filters users based on name/username
 
 
-app.get('/search',async function(req,res){
+app.get('/search',async function(req,res){  
 
     const {keyword} = req.query;
 
-    console.log(req.query);
-
     pool.query (
-        'SELECT name, biglittle, hobbylist, yr, major, email from USERS WHERE name LIKE $1;', ['%'+keyword+'%'], 
+        `SELECT name, biglittle, hobbylist, yr, major, email FROM Users WHERE biglittle LIKE $1 AND 
+        (yr = $2 AND major = $3 AND hobbylist LIKE $4) OR (yr != $2 AND major != $3 AND hobbylist NOT LIKE $4);`
+        ,['%'+keyword+'%', req.user.yr, req.user.major, '%'+req.user.hobbylist+'%'], 
         (err, results) => {
             if (err) {
                 throw err;
@@ -445,7 +461,7 @@ app.get('/search',async function(req,res){
             });
         }
     )
-})
+});
 
 app.get('/showuser', function(req, res) {
     console.log("Showing user info...");
@@ -465,6 +481,6 @@ app.get('/showuser', function(req, res) {
         }
     )
 
-})
+});
 
 /*End of search feature*/

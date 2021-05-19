@@ -20,7 +20,7 @@
 
     <!--SEARCH BAR-->
     <form action="/search" method="GET" class="form-inline" id="search-form">
-        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required> 
         <input type="submit" class="btn btn-primary" value="Search">
         <div class="searchBox">
         </div>
@@ -43,7 +43,7 @@
             </ul>
             <% i++;}) %>
                 <% } else { %>
-                    <div class="search-err">No user found with that name!</div>
+                    <div class="search-err">No user found who matches your attributes!</div>
                     <% } %>
 
     </div>

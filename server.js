@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require("passport");
+const request = require('request');
 
 var User;
 var isNewUser = false;
@@ -35,9 +36,31 @@ app.use(passport.initialize());
 app.use(passport.session())
 app.use(flash());
 
+app.get('/', function (req, res, next) {
+    res.render('captcha');
+});
 
-app.get('/', (req, res) => {
-    res.render('index')
+app.get('/home', function (req, res) {
+    res.render('index');
+});
+
+app.post('/captcha', function(req, res) {
+  if(req.body === undefined || req.body === '' || req.body === null)
+  {
+    return res.json({"responseError" : "captcha error"});
+  }
+  var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
+ 
+  const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.socket.remoteAddress;  
+  request(verificationURL,function(error,response,body) {
+    body = JSON.parse(body);
+    //console.log(body);
+    if(body.success) {
+        res.redirect('/home');
+    } else {
+      return res.json({"responseError" : "Failed captcha verification"});
+    }
+  });
 });
 
 app.get('/users/login', checkAuthenticated, (req, res) => {
@@ -181,17 +204,6 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
 
 app.post('/users/register', async (req, res) => {
     let { name, email, password, password2 } = req.body;
-
-    /*console.log({
-        name,
-        biglittle,
-        hobbylist,
-        yr,
-        major,
-        email,
-        password,
-        password2
-    });*/
 
     let errors = [];
     if (!name || !email || !password || !password2) {
@@ -480,7 +492,4 @@ app.get('/showuser', function(req, res) {
             });
         }
     )
-
 });
-
-/*End of search feature*/

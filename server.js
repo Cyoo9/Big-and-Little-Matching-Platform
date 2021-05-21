@@ -10,7 +10,7 @@ const request = require('request');
 var User;
 var isNewUser = false;
 var googleUser = false;
-var sessionpw;
+var searchedUser = "";
 
 const initializePassport = require('./passportConfig')
 
@@ -93,7 +93,8 @@ app.get('/users/profile', checkNotAuthenticated, (req, res) => {
                 hobbylist: results.rows[0].hobbylist,
                 yr: results.rows[0].yr,
                 major: results.rows[0].major,
-                email: results.rows[0].email
+                email: results.rows[0].email,
+                numLikes: results.rows[0].numlikes
               });
         }
         );
@@ -104,7 +105,8 @@ app.get('/users/profile', checkNotAuthenticated, (req, res) => {
             hobbylist: req.user.hobbylist,
             yr: req.user.yr,
             major: req.user.major,
-            email: req.user.email
+            email: req.user.email,
+            numLikes: req.user.numlikes
           });
     }
 
@@ -239,9 +241,9 @@ app.post('/users/register', async (req, res) => {
                     'SELECT count(*) FROM users'
                 )
                 pool.query(
-                    `INSERT INTO users (name, email, password) 
-                        VALUES ($1, $2, $3) 
-                        RETURNING id, password`, [name, email, hashedPassword],
+                    `INSERT INTO users (name, email, password, numlikes) 
+                        VALUES ($1, $2, $3, $4) 
+                        RETURNING id, password`, [name, email, hashedPassword, 0],
                     (err, results) => {
                         if (err) {
                             throw err;
@@ -458,9 +460,8 @@ app.get('/search',async function(req,res){
     const {keyword} = req.query;
 
     pool.query (
-        `SELECT name, biglittle, hobbylist, yr, major, email FROM Users WHERE biglittle LIKE $1 AND 
-        (yr = $2 AND major = $3 AND hobbylist LIKE $4) OR (yr != $2 AND major != $3 AND hobbylist NOT LIKE $4);`
-        ,['%'+keyword+'%', req.user.yr, req.user.major, '%'+req.user.hobbylist+'%'], 
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users WHERE biglittle LIKE $1 or name = $2;`
+        ,['%'+keyword+'%', keyword], 
         (err, results) => {
             if (err) {
                 throw err;
@@ -479,7 +480,7 @@ app.get('/showuser', function(req, res) {
     console.log("Showing user info...");
 
     pool.query (
-        'SELECT name, biglittle, hobbylist, yr, major, email from USERS WHERE email = $1;', [req.query.prof], 
+        'SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM USERS WHERE email = $1;', [req.query.prof], 
         (err, results) => {
             if (err) {
                 throw err;
@@ -492,4 +493,23 @@ app.get('/showuser', function(req, res) {
             });
         }
     )
+});
+
+
+app.get('/showuser/like', function(req, res) {
+
+    let numLikes = parseInt(req.query.like);
+    numLikes++;
+
+    pool.query (
+        `UPDATE users 
+        set numlikes = $1
+        WHERE email = $2;`, [numLikes, req.query.prof], 
+        (err) => {
+            if(err) {
+                throw err;
+            }
+        }
+    );   
+    res.send("User Liked");
 });

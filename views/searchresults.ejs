@@ -30,7 +30,7 @@
         <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
             <ul>
                 <div class="search-container">
-                    <a href="/showuser?prof=<%=data.email%>" style="text-decoration: none; color: black" method="GET">
+                    <a href="/showuser?prof=<%=data.email%>&like=<%=data.numlikes%>" style="text-decoration: none; color: black" method="GET">
                         <div class="search-name">Name: <%=data.name%>
                         </div>
                         <div class="search-biglittle">

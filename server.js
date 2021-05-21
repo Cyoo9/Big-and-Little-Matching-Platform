@@ -361,9 +361,9 @@ passport2.use(new GoogleStrategy({
                     'SELECT count(*) FROM users'
                 )
                 pool.query(
-                    `INSERT INTO users (name, email, external_id) 
-                        VALUES ($1, $2, $3) 
-                        RETURNING id, external_id`, [name, email, token],
+                    `INSERT INTO users (name, email, external_id, numlikes, reputation) 
+                        VALUES ($1, $2, $3, $4, $5) 
+                        RETURNING id, external_id`, [name, email, token, 0, "Unknown"],
                     (err, results) => {
                         if (err) {
                             throw err;

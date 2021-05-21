@@ -10,7 +10,6 @@ const request = require('request');
 var User;
 var isNewUser = false;
 var googleUser = false;
-var searchedUser = "";
 
 const initializePassport = require('./passportConfig')
 
@@ -241,9 +240,9 @@ app.post('/users/register', async (req, res) => {
                     'SELECT count(*) FROM users'
                 )
                 pool.query(
-                    `INSERT INTO users (name, email, password, numlikes) 
-                        VALUES ($1, $2, $3, $4) 
-                        RETURNING id, password`, [name, email, hashedPassword, 0],
+                    `INSERT INTO users (name, email, password, numlikes, reputation) 
+                        VALUES ($1, $2, $3, $4, $5) 
+                        RETURNING id, password`, [name, email, hashedPassword, 0, "Unknown"],
                     (err, results) => {
                         if (err) {
                             throw err;
@@ -480,7 +479,7 @@ app.get('/showuser', function(req, res) {
     console.log("Showing user info...");
 
     pool.query (
-        'SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM USERS WHERE email = $1;', [req.query.prof], 
+        'SELECT name, biglittle, hobbylist, yr, major, email, reputation, numLikes FROM USERS WHERE email = $1;', [req.query.prof], 
         (err, results) => {
             if (err) {
                 throw err;
@@ -498,13 +497,27 @@ app.get('/showuser', function(req, res) {
 
 app.get('/showuser/like', function(req, res) {
 
+    let reputation = "Unknown";
+
     let numLikes = parseInt(req.query.like);
     numLikes++;
 
+    if(numLikes == 5) {
+        reputation = "Gaining Attraction"
+    } 
+    if(numLikes == 10) {
+        reputation = "Popular"
+    }
+    if(numLikes >= 15) {
+        reputation = "Very Popular"
+    }
+
     pool.query (
         `UPDATE users 
-        set numlikes = $1
-        WHERE email = $2;`, [numLikes, req.query.prof], 
+        SET
+        numlikes = $1,
+        reputation = $2
+        WHERE email = $3;`, [numLikes, reputation, req.query.prof], 
         (err) => {
             if(err) {
                 throw err;

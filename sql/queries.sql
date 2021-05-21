@@ -16,6 +16,7 @@ CREATE TABLE users
     password VARCHAR(255),
     seeking VARCHAR(255),
     external_id VARCHAR(255),
+	numlikes INTEGER,
 	PRIMARY KEY (id)
 );
 

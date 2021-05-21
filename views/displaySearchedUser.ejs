@@ -34,7 +34,12 @@
                 <div class ="userinfo-hobbylist">Hobbies: <%=data.hobbylist%></div>
                 <div class ="userinfo-yr">Year: <%=data.yr%></div>
                 <div class ="userinfo-major">Major: <%=data.major%></div>
+                <div class="userinfo-numlikes">Likes: <%=data.numlikes%></div>
         </div>
+        <div>
+            <button><a href="/showuser/like?prof=<%=data.email%>&like=<%=data.numlikes%>">Like</a></button>
+        </div>
+
     </ul> 
     <% i++;}) %> 
     <% }%>

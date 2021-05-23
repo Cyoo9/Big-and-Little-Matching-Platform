@@ -1,50 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com">
+    <meta name="google-signin-client_id"
+        content="278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com">
     <script src="server.js"></script>
     <script src="main.js"></script>
 
     <title>Document</title>
 </head>
+
 <body>
     <h1>THIS IS WHERE THE USER PROFILE IS DISPLAYED FROM THE SEARCH</h1>
     <!--SEARCH BAR-->
     <form action="/search" method="GET" class="form-inline" id="search-form">
-        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
+        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+            required>
         <input type="submit" class="btn btn-primary" value="Search">
         <div class="searchBox">
         </div>
-      </form>
+    </form>
 
     <div class="userinfo-table">
-  <% if(userData.length != 0) {
-    var i = 1;
-    userData.forEach(function(data) {
-        %>
-    <ul>
-        <div class="userinfo-container">
-                <div class="userinfo-name">Name: <%=data.name%></div>
-                <div class="userinfo-biglittle"><%=data.biglittle%></div>
-                <div class ="userinfo-hobbylist">Hobbies: <%=data.hobbylist%></div>
-                <div class ="userinfo-yr">Year: <%=data.yr%></div>
-                <div class ="userinfo-major">Major: <%=data.major%></div>
-                <div class="userinfo-numlikes">Likes: <%=data.numlikes%></div>
-                <div class="useinfo-reputation">Reputation: <%=data.reputation%></div>
-        </div>
-        <div>
-            <button><a href="/showuser/like?prof=<%=data.email%>&like=<%=data.numlikes%>">Like</a></button>
-        </div>
+        <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
+            <ul>
+                <div class="userinfo-container">
+                    <div class="userinfo-name">Name: <%=data.name%>
+                    </div>
+                    <div class="userinfo-biglittle">
+                        <%=data.biglittle%>
+                    </div>
+                    <div class="userinfo-hobbylist">Hobbies: <%=data.hobbylist%>
+                    </div>
+                    <div class="userinfo-yr">Year: <%=data.yr%>
+                    </div>
+                    <div class="userinfo-major">Major: <%=data.major%>
+                    </div>
+                    <div class="userinfo-numlikes">Likes: <%=data.numlikes%>
+                    </div>
+                    <div class="useinfo-reputation">Reputation: <%=data.reputation%>
+                    </div>
+                </div>
+                <div>
+                    <button><a href="/showuser/like?prof=<%=data.email%>&like=<%=data.numlikes%>">Like</a></button>
+                    <button class="like-button" value=<%=data.email%> onclick="incrementLike(this); return
+                        false">Like</button>
 
-    </ul> 
-    <% i++;}) %> 
-    <% }%>
+                    <script>
+                        //create a like table in sql
+                        //on page load, check if user likes user, if so display unlike, else like
+                        //create a match
+                        function incrementLike(obj) {
+                            if (document.getElementsByClassName('like-button')[0].innerHTML == "Like") {
+                                document.getElementsByClassName('like-button')[0].innerHTML = "Unlike";
+                            }
+                            else {
+                                decrementLike(obj);
+                            }
+                            $.ajax({
+                                dataType: 'json',
+                                data: {
+                                    email: obj.value
+                                },
+                                type: 'GET',
+                                url: "/showuser/like",
+                            });
+                        }
+                        function decrementLike(obj) {
+                            $.ajax({
+                                dataType: 'json',
+                                data: {
+                                    email: obj.value
+                                },
+                                type: 'GET',
+                                url: "/showuser/unlike",
+                            });
+                            document.getElementsByClassName('like-button')[0].innerHTML = "Like";
+                        }
+                    </script>
+                </div>
+            </ul>
+            <% i++;}) %>
+                <% }%>
     </div>
 
 </body>
+
 </html>

@@ -17,7 +17,9 @@
     <title>Document</title>
 </head>
 
-<body>
+
+<body onload="getLikes();">
+
     <h1>THIS IS WHERE THE USER PROFILE IS DISPLAYED FROM THE SEARCH</h1>
     <!--SEARCH BAR-->
     <form action="/search" method="GET" class="form-inline" id="search-form">
@@ -57,22 +59,49 @@
                         //create a like table in sql
                         //on page load, check if user likes user, if so display unlike, else like
                         //create a match
+
+                        function getLikes() {
+                            console.log("GET LIKES");
+                            $.ajax({
+                                dataType: 'json',
+                                data: {
+                                    email: document.getElementsByClassName('like-button')[0].value
+                                },
+                                type: 'GET',
+                                url: "/getlikes",
+                                success: function (response) {
+                                    if (response >= 1) {
+                                        document.getElementsByClassName('like-button')[0].innerHTML = "Unlike";
+                                    }
+                                    else {
+                                        document.getElementsByClassName('like-button')[0].innerHTML = "Like";
+                                    }
+                                },
+                                error: function (response) {
+                                    alert('server error');
+                                }
+                            });
+                        }
+
+                        //increments like
                         function incrementLike(obj) {
                             if (document.getElementsByClassName('like-button')[0].innerHTML == "Like") {
                                 document.getElementsByClassName('like-button')[0].innerHTML = "Unlike";
+                                $.ajax({
+                                    dataType: 'json',
+                                    data: {
+                                        email: obj.value
+                                    },
+                                    type: 'GET',
+                                    url: "/showuser/like",
+                                });
                             }
                             else {
                                 decrementLike(obj);
                             }
-                            $.ajax({
-                                dataType: 'json',
-                                data: {
-                                    email: obj.value
-                                },
-                                type: 'GET',
-                                url: "/showuser/like",
-                            });
                         }
+
+                        //decrement likes
                         function decrementLike(obj) {
                             $.ajax({
                                 dataType: 'json',

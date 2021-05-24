@@ -500,6 +500,23 @@ app.get('/showuser/like', function (req, res) {
 
     let reputation = "Unknown";
     var numLikes;
+    var email;
+
+    if(googleUser == true) {
+        email = userProfile.emails[0].value;
+    }
+    else {
+        email = User.email;
+    }
+    pool.query(
+        `INSERT INTO like_users(email, user_liked_email)
+        VALUES($1, $2)`, [email ,req.query.email], (err, results) => {
+            if (err) {
+                throw err;
+            }
+
+        }
+    )
 
     pool.query(
         'SELECT numlikes FROM USERS WHERE email = $1;', [req.query.email],
@@ -541,6 +558,23 @@ app.get('/showuser/unlike', function (req, res) {
 
     let reputation = "Unknown";
     var numLikes;
+    var email;
+
+    if(googleUser == true) {
+        email = userProfile.emails[0].value;
+    }
+    else {
+        email = User.email;
+    }
+
+    pool.query(
+        `DELETE FROM like_users
+        WHERE email = $1 and user_liked_email = $2`, [email ,req.query.email], (err, results) => {
+            if (err) {
+                throw err;
+            }
+        }
+    )
 
     pool.query(
         'SELECT numlikes FROM USERS WHERE email = $1;', [req.query.email],
@@ -581,10 +615,96 @@ app.get('/showuser/unlike', function (req, res) {
 
 
 
-/*Start of comment feature*/
+/*Start of Checking if user liked a user for like button */
+app.get('/getlikes', function (req, res) {
+    console.log("Getting like button...");
+
+    var email;
+
+    if(googleUser == true) {
+        email = userProfile.emails[0].value;
+    }
+    else {
+        email = User.email;
+    }
+
+    pool.query(
+        `SELECT COUNT(*) FROM like_users A
+        WHERE A.email = $1
+        AND A.user_liked_email = $2;`, [email, req.query.email],
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            res.send(results.rows[0].count);
+        }
+    )
+});
+
+
+/*Start of match feature*/
 
 
 
-/*End of comment feature*/
+/*End of match feature*/
 
 
+
+
+/*Start of Chat feature*/
+
+
+
+/*End of Chat feature*/
+
+
+/*MATCH QUERY
+
+on page load, select user.email, and check if user.like_user_email = profile viewed email
+if so, display unlike button
+-done so with ajax
+
+--check for likes or unlikes
+SELECT COUNT(*) FROM like_users A
+WHERE A.email = 'f@gmail.com'
+AND A.user_liked_email = 'test@gmail.com';
+
+--checks if both user matched
+SELECT COUNT(*)
+        FROM like_users A
+        JOIN like_users B
+        ON A.email = 'nguyen.jeffreyson@gmail.com'
+	AND A.user_liked_email = 'f@gmail.com'
+	AND B.email = 'f@gmail.com'
+        AND B.user_liked_email = 'nguyen.jeffreyson@gmail.com';
+        
+
+https://stackoverflow.com/questions/6360739/how-to-store-array-or-multiple-values-in-one-column
+
+SELECT A.from_user_id AS userA, B.from_user_id AS userB
+FROM likes_likes A
+JOIN likes_likes B
+  ON A.from_user_id = B.to_user_id
+  AND A.to_user_id = B.from_user_id
+  AND A.id <> B.id
+WHERE A.value = 1
+  AND B.value = 1
+  
+  
+  `SELECT A.email as userA, B.email as userB
+        FROM like_users A
+        JOIN like_users B
+        ON A.email = B.user_liked_email
+        AND B.user_liked_email = A.email`
+  
+
+select u.*
+from
+    `like` ul inner join `like` lu
+        on ul.user_id = lu.like_id and ul.like_id = lu.user_id
+    inner join `user` u
+        on u.id = ul.like_id
+where
+    ul.user_id = ?
+
+  */

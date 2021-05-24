@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS COMMENTS CASCADE;
+DROP TABLE IF EXISTS like_users CASCADE;
+DROP TABLE IF EXISTS matches CASCADE;
+
 
 
 CREATE TABLE users
@@ -19,9 +21,8 @@ CREATE TABLE users
 );
 
 CREATE TABLE like_users(
-	userid INTEGER,
-	user_liked_email VARCHAR(255),
-	FOREIGN KEY (userid) REFERENCES users(id)
+	email VARCHAR(255),
+	user_liked_email VARCHAR(255)
 );
 
 CREATE TABLE matches (
@@ -30,7 +31,7 @@ CREATE TABLE matches (
 	match_user_name VARCHAR(255),
 	match_user_biglittle VARCHAR(255),
 	FOREIGN KEY (userid) REFERENCES users(id)
-)
+);
 
 CREATE INDEX user_id_index ON users USING BTREE(id);
 CREATE INDEX user_name_index ON users USING BTREE(name);
@@ -44,7 +45,7 @@ CREATE INDEX user_external_id_index ON users USING BTREE(external_id);
 CREATE INDEX user_reputation_index ON users USING BTREE(reputation);
 CREATE INDEX user_numlikes_index ON users USING BTREE(numlikes);
 
-CREATE INDEX like_users_userid_index ON like_users USING BTREE(userid);
+CREATE INDEX like_users_email_index ON like_users USING BTREE(email);
 CREATE INDEX like_users_index ON like_users USING BTREE(user_liked_email);
 
 CREATE INDEX matches_userid_index ON matches USING BTREE(userid);
@@ -55,6 +56,14 @@ CREATE INDEX match_user_biglittle_index ON matches USING BTREE(match_user_biglit
 
 
 
+
+/*
+copy and paste below in sql to delete all tables
+
+drop schema public cascade;
+create schema public;
+
+*/
 
 
 

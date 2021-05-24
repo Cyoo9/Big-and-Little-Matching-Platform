@@ -15,6 +15,7 @@ const initializePassport = require('./passportConfig')
 
 initializePassport(passport);
 
+app.use(express.static(__dirname + '/public'));
 
 const PORT = process.env.PORT || 3000;
 

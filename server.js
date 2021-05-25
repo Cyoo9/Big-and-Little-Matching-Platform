@@ -15,8 +15,6 @@ const initializePassport = require('./passportConfig')
 
 initializePassport(passport);
 
-app.use(express.static(__dirname + '/public'));
-
 const PORT = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
@@ -73,10 +71,18 @@ app.get('/users/register', checkAuthenticated, (req, res) => {
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     User = req.user;
-    res.render('dashboard', { user: req.user.name });
-    username = req.user.name; 
-    major = req.user.major;
-    year = req.user.yr;
+    pool.query (
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users;`,
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            res.render('dashboard', {
+                user: req.user.name, userData: results.rows
+            });
+        }
+    );
+
 });
 
 app.get('/users/profile', checkNotAuthenticated, (req, res) => {

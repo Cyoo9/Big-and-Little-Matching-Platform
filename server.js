@@ -76,7 +76,7 @@ app.get('/users/register', checkAuthenticated, checkCaptchaCompleted, (req, res)
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     User = req.user;
     pool.query (
-        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users WHERE name != $1;`, [req.user.name],
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes, reputation FROM Users WHERE name != $1;`, [req.user.name],
         (err, results) => {
             if (err) {
                 throw err;
@@ -320,7 +320,7 @@ app.use(passport2.session());
 
 app.get('/googleusers/dashboard', (req, res) => {
     pool.query(
-        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users WHERE email != $1`, [userProfile.emails[0].value], function (err, results) {
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes, reputation FROM Users WHERE email != $1`, [userProfile.emails[0].value], function (err, results) {
         if (err) {
             throw err;
         }

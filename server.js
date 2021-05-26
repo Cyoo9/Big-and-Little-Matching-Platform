@@ -319,15 +319,13 @@ app.use(passport2.initialize());
 app.use(passport2.session());
 
 app.get('/googleusers/dashboard', (req, res) => {
-
     pool.query(
-        `SELECT * FROM users 
-        WHERE email = $1`, [userProfile.emails[0].value], function (err, results) {
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users WHERE email != $1`, [userProfile.emails[0].value], function (err, results) {
         if (err) {
             throw err;
         }
         console.log(results.rows);
-        res.render('dashboard', {user: results.rows[0].name});
+        res.render('dashboard', {user: results.rows[0].name, userData: results.rows });
     }
     );
 });
@@ -520,17 +518,17 @@ app.get('/showuser/like', function(req, res) {
 
     let reputation = "Unknown";
 
-    let numLikes = parseInt(req.query.like);
+    let numLikes = req.query.like;
     numLikes++;
 
     if(numLikes == 5) {
-        reputation = "Gaining Attraction"
+        reputation = "Gaining Attraction";
     } 
     if(numLikes == 10) {
-        reputation = "Popular"
+        reputation = "Popular";
     }
     if(numLikes >= 15) {
-        reputation = "Very Popular"
+        reputation = "Very Popular";
     }
 
     pool.query (
@@ -545,5 +543,5 @@ app.get('/showuser/like', function(req, res) {
             }
         }
     );   
-    res.send("User Liked");
+    res.redirect("/users/dashboard");
 });

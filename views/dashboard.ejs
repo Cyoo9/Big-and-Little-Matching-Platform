@@ -19,13 +19,43 @@
 
     <a href="/users/profile">Profile</a>
 
-    <!--SEARCH BAR-->
     <form action="/search" method="GET" class="form-inline" id="search-form">
-        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
-        <input type="submit" class="btn btn-primary" value="Search">
-        <div class="searchBox">
+            <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
+            <input type="submit" class="btn btn-primary" value="Search">
+            <div class="searchBox">
+            </div>
+    </form>
+
+
+    <div>Total list of users: </div>
+        <div class="userinfo-table">
+            <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
+                <ul>
+                    <div class="userinfo-container">
+                        <div class="userinfo-name">Name: <%=data.name%>
+                        </div>
+                        <div class="userinfo-biglittle">
+                            <%=data.biglittle%>
+                        </div>
+                        <div class="userinfo-hobbylist">Hobbies: <%=data.hobbylist%>
+                        </div>
+                        <div class="userinfo-yr">Year: <%=data.yr%>
+                        </div>
+                        <div class="userinfo-major">Major: <%=data.major%>
+                        </div>
+                        <div class="userinfo-numlikes">Likes: <%=data.numlikes%>
+                        </div>
+                        <div class="useinfo-reputation">Reputation: <%=data.reputation%>
+                        </div>
+                    </div>
+                    <div>
+                        <button><a href="/showuser/like?prof=<%=data.email%>&like=<%=data.numlikes%>">Like</a></button>
+                    </div>
+        
+                </ul>
+                <% i++;}) %>
+                    <% }%>
         </div>
-      </form>
 
 </body>
 </html>

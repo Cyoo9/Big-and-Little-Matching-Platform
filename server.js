@@ -144,8 +144,11 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async (req, res) =
     else major = req.user.major;
     if(req.body.email != "") email = req.body.email; 
     else email = req.user.email;
-    if(req.body.password != "") hashedPassword = await bcrypt.hash(req.body.password, 10);
-    else hashedPassword = req.user.password; 
+    if(req.body.password == "") {
+        hashedPassword = await bcrypt.hash(req.body.passwordCurrent, 10);
+    } else {
+        hashedPassword = await bcrypt.hash(req.body.password, 10);
+    }
 
     /*let errors = [];
 

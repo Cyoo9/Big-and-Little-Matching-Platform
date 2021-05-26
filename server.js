@@ -7,6 +7,7 @@ const flash = require('express-flash');
 const passport = require("passport");
 const request = require('request');
 
+var captcha = false;
 var User;
 var isNewUser = false;
 var googleUser = false;
@@ -36,11 +37,11 @@ app.use(passport.initialize());
 app.use(passport.session())
 app.use(flash());
 
-app.get('/', function (req, res, next) {
+app.get('/', function (req, res) {
     res.render('captcha');
 });
 
-app.get('/home', function (req, res) {
+app.get('/home', checkCaptchaCompleted, function (req, res) {
     res.render('index');
 });
 
@@ -57,24 +58,25 @@ app.post('/captcha', function(req, res) {
     //console.log(body);
     if(body.success) {
         res.redirect('/home');
+        captcha = true;
     } else {
       return res.json({"responseError" : "Failed captcha verification"});
     }
   });
 });
 
-app.get('/users/login', checkAuthenticated, (req, res) => {
+app.get('/users/login', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
     res.render('login');
 });
 
-app.get('/users/register', checkAuthenticated, (req, res) => {
+app.get('/users/register', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
     res.render('register');
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     User = req.user;
     pool.query (
-        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users;`,
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes FROM Users WHERE name != $1;`, [req.user.name],
         (err, results) => {
             if (err) {
                 throw err;
@@ -290,6 +292,13 @@ function checkNotAuthenticated(req, res, next) {
     }
 
     res.redirect('/users/login')
+}
+
+function checkCaptchaCompleted(req, res, next) {
+    if(captcha) {
+        return next();
+    }
+    res.redirect('/');
 }
 
 app.listen(PORT, () => {

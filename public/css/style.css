@@ -137,6 +137,7 @@ body {
     bottom: 10%;
     border-radius: 14px;
     border: 1px solid grey;
+    background-color: white;
 }
 
 .sidebar-name {
@@ -265,7 +266,17 @@ body {
     padding: 25px;
 }
 
+.search-table {
+    padding: 40px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 10px;
+    max-height: 70%;
+    overflow-y: auto;
+}
+
 .search-container {
+    width: 300px;
     font-size: 16px;
     border-radius: 14px;
     border-style: solid;

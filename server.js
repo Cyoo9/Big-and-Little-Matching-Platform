@@ -103,11 +103,14 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     } else {
         User = req.user;
         pool.query(
-            `SELECT name, biglittle, hobbylist, yr, major, email, numLikes, reputation FROM Users WHERE name != $1;`, [req.user.name],
+            `SELECT name, biglittle, hobbylist, yr, major, email, numLikes, reputation FROM Users WHERE email != $1;`, [User.email],
             (err, results) => {
                 if (err) {
                     throw err;
                 }
+                console.log("showing");
+                console.log(results.rows);
+
                 res.render('dashboard', {
                     User: req.user.name,
                     userData: results.rows,

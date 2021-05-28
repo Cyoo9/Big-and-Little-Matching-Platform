@@ -231,6 +231,28 @@
         </form>
     </div>
 
+    <div class="search-table">
+        <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
+            <ul>
+                <div class="search-container">
+                    <a href="/showuser?prof=<%=data.email%>&like=<%=data.numlikes%>" style="text-decoration: none; color: black" method="GET">
+                        <img id="search-container-img" width="100" height="100" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
+                        <div class="search-name">Name:
+                            <%=data.name%>
+                        </div>
+                        <div class="search-biglittle">
+                            <%=data.biglittle%>
+                        </div>
+                        <div class="search-year">Year:
+                            <%=data.yr%>
+                        </div>
+                    </a>
+                </div>
+            </ul>
+            <% i++;}) %>
+                <% }  %>
+    </div>
+
     <div class="chat-sidebar">
         <h3 style="text-align: center;">Match List</h3>
     </div>

@@ -8,7 +8,6 @@ const passport = require("passport");
 const request = require('request');
 
 //links to css file
-app.use(express.static(__dirname + '/public'));
 
 var User;
 var isNewUser = false;
@@ -22,6 +21,9 @@ const PORT = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static(__dirname + '/public'));
+
 
 app.use(express.static(__dirname + '/public'));
 
@@ -54,10 +56,9 @@ app.get('/home', function(req, res) {
     res.render('index');
 });
 
+
 app.post('/captcha', function(req, res) {
-    if (req.body === undefined || req.body === '' || req.body === null) {
-        return res.json({ "responseError": "captcha error" });
-        /*if(req.body === undefined || req.body === '' || req.body === null)
+  if(req.body === undefined || req.body === '' || req.body === null)
   {
     return res.json({"responseError" : "captcha error"});
   }
@@ -71,27 +72,17 @@ app.post('/captcha', function(req, res) {
         res.redirect('/home');
         captcha = true;
     } else {
-      return res.json({"responseError" : "Failed captcha verification"});*/
+      return res.json({"responseError" : "Failed captcha verification"});
     }
-    var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
-
-    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.socket.remoteAddress;
-    request(verificationURL, function(error, response, body) {
-        body = JSON.parse(body);
-        //console.log(body);
-        if (body.success) {
-            res.redirect('/home');
-        } else {
-            return res.json({ "responseError": "Failed captcha verification" });
-        }
-    });
+  });
 });
 
-app.get('/users/login', checkAuthenticated, /*checkCaptchaCompleted,*/ (req, res) => {
+
+app.get('/users/login', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
     res.render('login');
 });
 
-app.get('/users/register', checkAuthenticated, /*checkCaptchaCompleted,*/ (req, res) => {
+app.get('/users/register', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
     res.render('register');
 });
 
@@ -958,5 +949,3 @@ app.get('/getUserInfo', function(req, res) {
         /*);   
         res.redirect("/users/dashboard");*/
 });
-/*End of Chat feature*/
-/**/

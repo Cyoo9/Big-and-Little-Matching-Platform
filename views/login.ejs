@@ -12,15 +12,19 @@
 <body>
     <h1>Login</h1>
     <ul>
-    <% if(messages.success_msg) { %>
-    <li><%= messages.success_msg %></li>
-    <% } %>
+        <% if(messages.success_msg) { %>
+            <li>
+                <%= messages.success_msg %>
+            </li>
+            <% } %>
     </ul>
 
     <ul>
         <% if(messages.error) { %>
-        <li><%= messages.error %></li>
-        <% } %>
+            <li>
+                <%= messages.error %>
+            </li>
+            <% } %>
     </ul>
 
     <form action="/users/login" method="POST">
@@ -33,9 +37,19 @@
         <div>
             <input type="submit" value="Login" />
         </div>
+        <!--Google login button-->
+        <div class="row">
+            <div class="col-md-3">
+                <a class="oauth-container btn darken-4 white black-text" href="/auth/google" role="button"
+                    style="text-transform:none">
+                    <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                    Login with Google
+                </a>
+            </div>
+        </div>
         <a href="/users/register">Register</a>
     </form>
-
 </body>
 
 </html>

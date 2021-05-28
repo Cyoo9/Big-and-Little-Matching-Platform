@@ -9,117 +9,399 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id"
-        content="278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="278162699022-vcn0nfdpt3hv4hcrqfgc3nnimvub1qrj.apps.googleusercontent.com">
+    <!-- Remember to include jQuery :) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <script src="server.js"></script>
     <script src="main.js"></script>
 
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="jquery-3.5.1.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <title>Searched profile user</title>
 </head>
 
 
 <body onload="getLikes();">
 
-    <h1>THIS IS WHERE THE USER PROFILE IS DISPLAYED FROM THE SEARCH</h1>
-    <!--SEARCH BAR-->
-    <form action="/search" method="GET" class="form-inline" id="search-form">
-        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-            required>
-        <input type="submit" class="btn btn-primary" value="Search">
-        <div class="searchBox">
-        </div>
-    </form>
+    <div id="search-result-temp">
+        <a href="/users/dashboard">Home</a>
+        <a href="/users/logout">Logout</a>
+
+        <!--SEARCH BAR-->
+        <form action="/search" method="GET" class="form-inline" id="search-form">
+            <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
+            <input type="submit" class="btn btn-primary" value="Search">
+            <div class="searchBox">
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal HTML embedded directly into document -->
 
     <div class="userinfo-table">
         <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
             <ul>
                 <div class="userinfo-container">
-                    <div class="userinfo-name">Name: <%=data.name%>
+                    <img id="other-user-ava" width="300" height="300" style="border-radius: 50%" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
+                    <div class="userinfo-name">Name:
+                        <%=data.name%>
                     </div>
                     <div class="userinfo-biglittle">
                         <%=data.biglittle%>
                     </div>
-                    <div class="userinfo-hobbylist">Hobbies: <%=data.hobbylist%>
+                    <div class="userinfo-hobbylist">Hobbies:
+                        <%=data.hobbylist%>
                     </div>
-                    <div class="userinfo-yr">Year: <%=data.yr%>
+                    <div class="userinfo-yr">Year:
+                        <%=data.yr%>
                     </div>
-                    <div class="userinfo-major">Major: <%=data.major%>
+                    <div class="userinfo-major">Major:
+                        <%=data.major%>
                     </div>
-                    <div class="userinfo-numlikes">Likes: <%=data.numlikes%>
+                    <div class="userinfo-numlikes">Likes:
+                        <%=data.numlikes%>
                     </div>
-                    <div class="useinfo-reputation">Reputation: <%=data.reputation%>
+                    <div class="useinfo-reputation">Reputation:
+                        <%=data.reputation%>
                     </div>
                 </div>
                 <div>
-                    <button><a href="/showuser/like?prof=<%=data.email%>&like=<%=data.numlikes%>">Like</a></button>
                     <button class="like-button" value=<%=data.email%> onclick="incrementLike(this); return
-                        false">Like</button>
+                        false">like</button>
 
-                    <script>
-                        //create a like table in sql
-                        //on page load, check if user likes user, if so display unlike, else like
-                        //create a match
+                    <div id="ex1" class="modal">
+                        <h3>Sweet! You matched with</h3>
+                        <h3 id="match-name">
+                            <%=data.name%>!</h3>
+                    </div>
 
-                        function getLikes() {
-                            console.log("GET LIKES");
-                            $.ajax({
-                                dataType: 'json',
-                                data: {
-                                    email: document.getElementsByClassName('like-button')[0].value
-                                },
-                                type: 'GET',
-                                url: "/getlikes",
-                                success: function (response) {
-                                    if (response >= 1) {
-                                        document.getElementsByClassName('like-button')[0].innerHTML = "Unlike";
-                                    }
-                                    else {
-                                        document.getElementsByClassName('like-button')[0].innerHTML = "Like";
-                                    }
-                                },
-                                error: function (response) {
-                                    alert('server error');
+                </div>
+                <script>
+                    //create a like table in sql
+                    //on page load, check if user likes user, if so display unlike, else like
+                    //create a match
+
+                    function getLikes() {
+                        console.log("GETTING LIKE BUTTON STATUS");
+                        $.ajax({
+                            dataType: 'json',
+                            data: {
+                                email: document.getElementsByClassName('like-button')[0].value
+                            },
+                            type: 'GET',
+                            url: "/getlikes",
+                            success: function(response) {
+                                if (response >= 1) {
+                                    document.getElementsByClassName('like-button')[0].innerHTML = "unlike";
+                                    console.log("Button status: Unlike");
+                                } else {
+                                    document.getElementsByClassName('like-button')[0].innerHTML = "like";
+                                    console.log("Button status: Like");
                                 }
-                            });
-                        }
-
-                        //increments like
-                        function incrementLike(obj) {
-                            if (document.getElementsByClassName('like-button')[0].innerHTML == "Like") {
-                                document.getElementsByClassName('like-button')[0].innerHTML = "Unlike";
-                                $.ajax({
-                                    dataType: 'json',
-                                    data: {
-                                        email: obj.value
-                                    },
-                                    type: 'GET',
-                                    url: "/showuser/like",
-                                });
+                            },
+                            error: function(response) {
+                                alert('server error');
                             }
-                            else {
-                                decrementLike(obj);
-                            }
-                        }
+                        });
+                    }
 
-                        //decrement likes
-                        function decrementLike(obj) {
+                    //increments like
+                    function incrementLike(obj) {
+                        if (document.getElementsByClassName('like-button')[0].innerHTML == "like") {
+                            document.getElementsByClassName('like-button')[0].innerHTML = "unlike";
                             $.ajax({
                                 dataType: 'json',
                                 data: {
                                     email: obj.value
                                 },
                                 type: 'GET',
-                                url: "/showuser/unlike",
+                                url: "/showuser/like"
                             });
-                            document.getElementsByClassName('like-button')[0].innerHTML = "Like";
-                        }
-                    </script>
-                </div>
-            </ul>
-            <% i++;}) %>
-                <% }%>
-    </div>
+                            setTimeout(function() {
+                                checkMatch();
+                            }, 100);
 
+                        } else {
+                            decrementLike(obj);
+                        }
+                    }
+
+                    //decrement likes
+                    function decrementLike(obj) {
+                        $.ajax({
+                            dataType: 'json',
+                            data: {
+                                email: obj.value
+                            },
+                            type: 'GET',
+                            url: "/showuser/unlike"
+                        });
+                        document.getElementsByClassName('like-button')[0].innerHTML = "like";
+                        setTimeout(function() {
+                            location.reload()
+                        }, 100);
+                    }
+
+                    //checks for match
+                    function checkMatch() {
+                        console.log("Checking for match...");
+                        var xhr = $.ajax({
+                            dataType: 'json',
+                            data: {
+                                email: document.getElementsByClassName('like-button')[0].value
+                            },
+                            type: 'GET',
+                            url: "/checkmatch",
+                            success: function(response) {
+                                console.log("finished checking");
+                                console.log(response);
+                                if (parseInt(response) >= 1) {
+                                    console.log("MATCHED!");
+                                    $('#ex1').modal("show");
+                                    setTimeout(function() {
+                                        $('#ex1').modal('hide')
+                                        location.reload()
+                                    }, 2500);
+                                }
+                            },
+                            error: function(response) {
+                                alert('server error');
+                            }
+                        });
+                    }
+                </script>
+    </div>
+    </ul>
+    <% i++;}) %>
+        <% }%>
+            </div>
+            <script>
+                function sendMsg() {
+                    const msgerInput = get(".input-message-box");
+
+                    //create a get ajax, grab the messages stored, and loop through each  msg and append
+                    const msgText = msgerInput.value;
+                    if (!msgText) return;
+
+                    $.ajax({
+                        dataType: 'json',
+                        data: {
+                            uEmail: usrEmail,
+                            text: msgText,
+                            time: formatDate(new Date())
+                        },
+                        type: 'POST',
+                        url: "/insertText",
+                    });
+                    msgerInput.value = "";
+
+                    appendMessage(usrName, formatDate(new Date()), "left", msgText);
+
+                    function get(selector, root = document) {
+                        return root.querySelector(selector);
+                    }
+
+                    //https://stackoverflow.com/questions/8888491/how-do-you-display-javascript-datetime-in-12-hour-am-pm-format
+                    function formatDate(date) {
+                        var h = date.getHours();
+                        var m = date.getMinutes();
+                        var ampm = h >= 12 ? 'pm' : 'am';
+                        h = h % 12;
+                        h = h ? h : 12; // the hour '0' should be '12'
+                        m = m < 10 ? '0' + m : m;
+                        var time = h + ':' + m + ' ' + ampm;
+                        return time;
+                    }
+                }
+
+                //gets match list
+                var prevMatchSize = 0;
+                $.ajax({
+                    url: '/getMatches',
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log("Got match list successfully");
+                        for (var i = 0; i < response[0].matches.length; i++) {
+                            if (prevMatchSize < response[0].matches.length) {
+                                for (var j = prevMatchSize; j < response[0].matches.length; j++) {
+                                    prevMatchSize = response[0].matches.length;
+                                    appendMatches(response[0].matches[j]);
+                                }
+                            } else {
+                                prevMatchSize = response[0].matches;
+                            }
+                        }
+                    },
+                    error: function(response) {
+                        alert('server error');
+                    }
+                });
+
+
+                function getName() {
+                    $.ajax({
+                        url: '/getinfo',
+                        method: 'get',
+                        success: function(response) {
+                            usrName = response;
+                        }
+
+                    });
+                }
+
+                //apends users onto match list box
+                function appendMatches(name) {
+                    $.ajax({
+                        url: '/getUserInfo',
+                        method: 'get',
+                        dataType: 'json',
+                        data: {
+                            email: name
+                        },
+                        success: function(response) {
+                            console.log("Got user info successfully");
+                            usrlikes = response.numlikes;
+                            const chatBox = get(".chat-sidebar");
+                            const msgHTML = `
+            <div class="sidebar-name">
+            <a style="text-decoration: none;" href="javascript:display_popup('${response.name}', '${response.name}', '${response.email}');">
+                <img width="30" height="30"
+                    src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png"/>
+                <span>${response.name}</span>
+            </a>
+        </div>`;
+                            //auto scrolling matchlist
+                            chatBox.insertAdjacentHTML("beforeend", msgHTML);
+                            chatBox.scrollTop += 500;
+
+                        },
+                        error: function(response) {
+                            alert('server error');
+                        }
+                    });
+
+                }
+
+                var usrEmail; //match  user email
+                var usrName; //logged in user name
+                var userlikes;
+                var prevMsgSize = 0; //checks if there are new messages
+
+                //loads message
+                function getMsg(e) {
+                    var xhr = $.ajax({
+                        url: '/getMsg',
+                        method: 'get',
+                        dataType: 'json',
+                        data: {
+                            uEmail: e
+                        },
+                        success: function(response) {
+                            for (var i = 1; i < response.jsondata.length; i++) {
+                                appendMessage(response.jsondata[i].name, response.jsondata[i].time, "left", response.jsondata[i].text);
+
+                                /*if (prevMsgSize < response.jsondata.length) {
+                                    for (var j = prevMsgSize; j < response.jsondata.length; j++) {
+                                        prevMsgSize = response.jsondata.length;
+                                        appendMessage(response.jsondata[j].name, response.jsondata[j].time, "left", response.jsondata[j].text);
+                                        prevMsgSize = 1;
+                                    }
+                                }
+                                else {
+                                    prevMsgSize = response.jsondata.length;
+                                }*/
+                            }
+                        },
+                        error: function(response) {
+                            alert('server error');
+                        }
+                    });
+                }
+
+                //adds chat bubble
+                function appendMessage(name, time, side, text) {
+                    const chatBox = get(".chat-box");
+                    const msgHTML = `
+    <div class="text-box ${side}-msg">
+      <div class="text-box-bubble">
+        <div class="text-box-info">
+          <div class="text-box-info-name">${name}</div>
+          <div class="text-box-info-time">${time}</div>
+        </div>
+        <div class="msg-text">${text}</div>
+      </div>
+    </div>`;
+                    //auto scrolling for chat box
+                    chatBox.insertAdjacentHTML("beforeend", msgHTML);
+                    chatBox.scrollTop += 500;
+                }
+
+                //gets a tag/class name
+                function get(selector, root = document) {
+                    return root.querySelector(selector);
+                }
+
+
+                //closes chat box
+                function close_popup() {
+                    document.getElementById("yolo").style.display = "none";
+                }
+
+                //displays chat box
+                function display_popup(id, name, email) {
+
+                    $('.left-msg').remove();
+                    var element = document.getElementById("yolo");
+                    element.style.display = "block";
+                    element = document.getElementsByClassName("popup-chat-header-left");
+                    element[0].innerHTML = name;
+                    usrEmail = email;
+                    getName();
+                    //usrName = document.getElementById('hello-user-name').innerHTML;
+                    getMsg(email);
+                    //setInterval(function () { getMsg(email) }, 500);
+                }
+
+                function getUserProfile() {
+                    location.href = '/showuser?prof=' + usrEmail + '&like=' + usrlikes;
+                }
+            </script>
+
+            <div class="chat-sidebar">
+                <h3 style="text-align: center;">Match List</h3>
+            </div>
+
+            <div class="popup-chat chat-popup" id="yolo">
+                <div class="popup-chat-header">
+                    <div class="popup-chat-header-left" style="cursor: pointer;" onclick="getUserProfile();">
+                    </div>
+                    <div class="popup-chat-header-right"><a href="javascript:close_popup(yolo);">x</a></div>
+                    <div style="clear: both"></div>
+                </div>
+                <div class="popup-chat-messages">
+                    <section class="chat-room">
+                        <main class="chat-box"></main>
+                        <form class="input-container" onsubmit="sendMsg(); return false"><input type="text" class="input-message-box" placeholder="Enter your message..."><button type="submit" class="input-send-button">Send</button></form>
+                    </section>
+                </div>
+            </div>
 </body>
 
 </html>

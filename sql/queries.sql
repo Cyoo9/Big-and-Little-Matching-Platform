@@ -17,6 +17,7 @@ CREATE TABLE users
     external_id VARCHAR(255),
 	reputation VARCHAR(255),
 	numlikes INTEGER,
+	matches VARCHAR[],
 	PRIMARY KEY (id)
 );
 
@@ -25,13 +26,12 @@ CREATE TABLE like_users(
 	user_liked_email VARCHAR(255)
 );
 
-CREATE TABLE matches (
-	userid INTEGER,
+CREATE TABLE messenger(
+	email VARCHAR(255),
 	match_user_email VARCHAR(255),
-	match_user_name VARCHAR(255),
-	match_user_biglittle VARCHAR(255),
-	FOREIGN KEY (userid) REFERENCES users(id)
+	jsondata json[]
 );
+
 
 CREATE INDEX user_id_index ON users USING BTREE(id);
 CREATE INDEX user_name_index ON users USING BTREE(name);
@@ -44,14 +44,14 @@ CREATE INDEX user_password_index ON users USING BTREE(password);
 CREATE INDEX user_external_id_index ON users USING BTREE(external_id);
 CREATE INDEX user_reputation_index ON users USING BTREE(reputation);
 CREATE INDEX user_numlikes_index ON users USING BTREE(numlikes);
+CREATE INDEX user_matches_index ON users USING BTREE(matches);
 
 CREATE INDEX like_users_email_index ON like_users USING BTREE(email);
 CREATE INDEX like_users_index ON like_users USING BTREE(user_liked_email);
 
-CREATE INDEX matches_userid_index ON matches USING BTREE(userid);
-CREATE INDEX match_user_email_index ON matches USING BTREE(match_user_email);
-CREATE INDEX match_user_name_index ON matches USING BTREE(match_user_name);
-CREATE INDEX match_user_biglittle_index ON matches USING BTREE(match_user_biglittle);
+CREATE INDEX messenger_email_index ON messenger USING BTREE(email);
+CREATE INDEX messenger_match_user_email_index ON messenger USING BTREE(match_user_email);
+
 
 
 

@@ -18,11 +18,12 @@ const initializePassport = require('./passportConfig')
 
 initializePassport(passport);
 
-
 const PORT = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static(__dirname + '/public'));
 
 app.use(
     session({
@@ -45,12 +46,32 @@ app.get('/', function(req, res, next) {
 });
 
 app.get('/home', function(req, res) {
+    /*app.get('/', function (req, res) {
+        res.render('captcha');
+    });
+
+    app.get('/home', checkCaptchaCompleted, function (req, res) {*/
     res.render('index');
 });
 
 app.post('/captcha', function(req, res) {
     if (req.body === undefined || req.body === '' || req.body === null) {
         return res.json({ "responseError": "captcha error" });
+        /*if(req.body === undefined || req.body === '' || req.body === null)
+  {
+    return res.json({"responseError" : "captcha error"});
+  }
+  var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
+ 
+  const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.socket.remoteAddress;  
+  request(verificationURL,function(error,response,body) {
+    body = JSON.parse(body);
+    //console.log(body);
+    if(body.success) {
+        res.redirect('/home');
+        captcha = true;
+    } else {
+      return res.json({"responseError" : "Failed captcha verification"});*/
     }
     var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
 
@@ -66,24 +87,34 @@ app.post('/captcha', function(req, res) {
     });
 });
 
-app.get('/users/login', checkAuthenticated, (req, res) => {
+app.get('/users/login', checkAuthenticated, /*checkCaptchaCompleted,*/ (req, res) => {
     res.render('login');
 });
 
-app.get('/users/register', checkAuthenticated, (req, res) => {
+app.get('/users/register', checkAuthenticated, /*checkCaptchaCompleted,*/ (req, res) => {
     res.render('register');
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
+
     if (googleUser == true) {
         console.log("displaying google user dashboard");
         res.redirect('/googleusers/dashboard');
     } else {
         User = req.user;
-        res.render('dashboard', { user: req.user.name, email: User.email });
-        username = req.user.name;
-        major = req.user.major;
-        year = req.user.yr;
+        pool.query(
+            `SELECT name, biglittle, hobbylist, yr, major, email, numLikes, reputation FROM Users WHERE name != $1;`, [req.user.name],
+            (err, results) => {
+                if (err) {
+                    throw err;
+                }
+                res.render('dashboard', {
+                    User: req.user.name,
+                    userData: results.rows,
+                    email: User.email
+                });
+            }
+        );
     }
 });
 
@@ -144,8 +175,11 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async(req, res) =>
     else major = req.user.major;
     if (req.body.email != "") email = req.body.email;
     else email = req.user.email;
-    if (req.body.password != "") hashedPassword = await bcrypt.hash(req.body.password, 10);
-    else hashedPassword = req.user.password;
+    if (req.body.password == "") {
+        hashedPassword = await bcrypt.hash(req.body.passwordCurrent, 10);
+    } else {
+        hashedPassword = await bcrypt.hash(req.body.password, 10);
+    }
 
     /*let errors = [];
 
@@ -293,6 +327,13 @@ function checkNotAuthenticated(req, res, next) {
     res.redirect('/users/login')
 }
 
+function checkCaptchaCompleted(req, res, next) {
+    if (captcha) {
+        return next();
+    }
+    res.redirect('/');
+}
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
@@ -308,19 +349,14 @@ app.use(passport2.initialize());
 app.use(passport2.session());
 
 app.get('/googleusers/dashboard', (req, res) => {
-
     pool.query(
-        `SELECT * FROM users 
-        WHERE email = $1`, [userProfile.emails[0].value],
+        `SELECT name, biglittle, hobbylist, yr, major, email, numLikes, reputation FROM Users WHERE email != $1`, [userProfile.emails[0].value],
         function(err, results) {
             if (err) {
                 throw err;
             }
             console.log(results.rows);
-            res.render('dashboard', {
-                user: results.rows[0].name,
-                email: userProfile.emails[0].value
-            });
+            res.render('dashboard', { User: userProfile.displayName, userData: results.rows, email: userProfile.emails[0].value });
         }
     );
 });
@@ -908,14 +944,16 @@ app.get('/getUserInfo', function(req, res) {
     }
 
     pool.query(
-        `SELECT name, email, numlikes FROM users WHERE email = $1;`, [req.query.email],
-        (err, results) => {
-            if (err) {
-                throw err;
+            `SELECT name, email, numlikes FROM users WHERE email = $1;`, [req.query.email],
+            (err, results) => {
+                if (err) {
+                    throw err;
+                }
+                res.send(results.rows[0]);
             }
-            res.send(results.rows[0]);
-        }
-    )
+        )
+        /*);   
+        res.redirect("/users/dashboard");*/
 });
 /*End of Chat feature*/
 /**/

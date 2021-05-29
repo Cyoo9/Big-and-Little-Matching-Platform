@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 
 
-app.use(express.static(__dirname + '/public'));
+//app.use(express.static(__dirname + '/public'));
 
 app.use(
     session({
@@ -37,7 +37,7 @@ app.use(
     })
 );
 
-app.use(express.static(__dirname + './public/css'));
+//app.use(express.static(__dirname + './public/css'));
 
 app.use(passport.initialize());
 app.use(passport.session())
@@ -62,23 +62,22 @@ app.get('/users/login', checkAuthenticated, checkCaptchaCompleted, (req, res) =>
 
 
 app.post('/captcha', function(req, res) {
-  if(req.body === undefined || req.body === '' || req.body === null)
-  {
-    return res.json({"responseError" : "captcha error"});
-  }
-  var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
- 
-  const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.socket.remoteAddress;  
-  request(verificationURL,function(error,response,body) {
-    body = JSON.parse(body);
-    //console.log(body);
-    if(body.success) {
-        res.redirect('/users/login');
-        captcha = true;
-    } else {
-      return res.json({"responseError" : "Failed captcha verification"});
+    if (req.body === undefined || req.body === '' || req.body === null) {
+        return res.json({ "responseError": "captcha error" });
     }
-  });
+    var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
+
+    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.socket.remoteAddress;
+    request(verificationURL, function(error, response, body) {
+        body = JSON.parse(body);
+        //console.log(body);
+        if (body.success) {
+            res.redirect('/users/login');
+            captcha = true;
+        } else {
+            return res.json({ "responseError": "Failed captcha verification" });
+        }
+    });
 });
 
 

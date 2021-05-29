@@ -43,10 +43,13 @@ body {
 }
 
 .chat-box {
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     flex: 1;
     overflow-y: auto;
+    overflow-x: auto;
     padding: 10px;
+    width: 260px;
+    border-radius: 3rem;
 }
 
 .chat-box::-webkit-scrollbar {
@@ -54,11 +57,11 @@ body {
 }
 
 .chat-box::-webkit-scrollbar-track {
-    background: #ddd;
+    background: rgba(221, 221, 221, 0.068);
 }
 
 .chat-box::-webkit-scrollbar-thumb {
-    background: #bdbdbd;
+    background: #bdbdbd38;
 }
 
 .text-box {
@@ -100,26 +103,32 @@ body {
 
 .input-container {
     display: flex;
-    padding: 10px;
+    /* padding: 10px; */
     border-top: var(--border);
     background: #eee;
+    width: 194px;
+    height: 30px;
 }
 
 .input-container * {
     border: none;
     border-radius: 10px;
     font-size: 1em;
-    padding: 8px;
+    padding: 10px;
 }
 
 .input-message-box {
     flex: 1;
     background: #ddd;
+    width: 190px;
+    height: 80px;
+    font-size: 16px;
 }
 
 .input-send-button {
     font-weight: bold;
-    margin-left: 20px;
+    font-size: 14px;
+    margin-left: 2px;
     background: rgb(95, 161, 248);
     color: #fff;
     cursor: pointer;
@@ -181,6 +190,8 @@ body {
     border-radius: 16px;
 }
 
+/* POPUP SECTION  */
+
 .popup-chat {
     display: none;
     position: fixed;
@@ -189,7 +200,7 @@ body {
     bottom: 0px;
     right: 250px;
     border-radius: 3rem;
-    background-color: rgb(237, 239, 244);
+    background-color: pink;
     border: 1px solid rgba(29, 49, 91, .3);
 }
 
@@ -197,9 +208,9 @@ body {
     background-color: transparent;
     font-weight: bold;
     padding-top: 10px;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 3rem;
-    color: rgb(95, 161, 248);
+    color: rgba(7, 3, 27, 0.842);
 }
 
 .popup-chat .popup-chat-header .popup-chat-header-left {
@@ -221,7 +232,7 @@ body {
 }
 
 .popup-chat .popup-chat-messages {
-    height: 100%;
+    height: 97%;
     overflow-y: scroll;
 }
 
@@ -279,13 +290,11 @@ body {
 
 .search-table {
     padding-top: 5%;
-    padding-left: 28%;
+    padding-left: 26%;
     padding-right: 20%;
     display: grid;
-    grid-template-columns: auto auto auto auto;
-    grid-template-rows: auto auto auto auto;
-    grid-gap: 10px;
-    max-height: 70%;
+    grid-template-columns: auto auto auto;
+    grid-gap: 12px;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -440,6 +449,11 @@ li {
 #search-form{
     padding-left: 10%;
     padding-top: 60%;
+}
+
+.form-control {
+    font-size: 12px;
+    letter-spacing: 0.1em;
 }
 
 a {

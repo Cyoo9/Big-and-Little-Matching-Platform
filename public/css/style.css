@@ -234,6 +234,10 @@ body {
     border-radius: 50%;
 }
 
+#popup-chat-img:hover {
+    transform: scale(1.2);
+}
+
 .popup-chat .popup-chat-header .popup-chat-header-right {
     float: right;
     font-size: 2rem;

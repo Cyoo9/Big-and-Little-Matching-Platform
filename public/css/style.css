@@ -21,7 +21,7 @@ html {
 
 body {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     height: 100vh;
     background-color: lightcyan;
@@ -253,20 +253,21 @@ body {
     bottom: 40px;
 }
 
-#search-result-temp {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 .userinfo-table {
     font-size: 18px;
-    border-radius: 14px;
+    /* border-radius: 14px; */
     border-style: solid;
     border-width: 1px;
     border-color: grey;
-    padding: 15px;
-    background-image: linear-gradient(cyan, lightgreen);
+    margin-left: 30%;
+    margin-right: 30%;
+    background-image: linear-gradient(rgb(11, 243, 243), rgb(255, 255, 255));
+}
+
+.userinfo-table ul {
+    margin-top: 10%;
+    margin-bottom: 5%;
+    margin-left: 4%;
 }
 
 #other-user-ava {
@@ -330,19 +331,19 @@ body {
 }
 
 .like-button {
-    border-radius: 16px;
+    /* border-radius: 16px; */
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
     margin-bottom: auto;
-    border-color: purple;
+    border-color: rgb(0, 17, 255);
 }
 
 .like-button:hover {
     border-width: 2px;
-    border-color: purple;
-    color: red;
+    border-color: rgb(1, 247, 255);
+    color: rgb(38, 0, 255);
     transform: scale(1.1);
 }
 
@@ -350,11 +351,11 @@ body {
 /*Dashboard - contains logout, home, profile, search bar, hello msg --- feel free to change its only temporally*/
 
 /* DESIGN REFERENCE: https://codepen.io/sreisner/pen/KazJmO */
-#home-temp {
+/* #home-temp {
     position: absolute;
     top: 0;
     left: 0;
-}
+} */
 
 .modal {
     /*display: block !important;*/
@@ -415,7 +416,7 @@ body {
     color: rgb(1, 71, 71);
     font-size: 0.65em;
     border-right: solid 2px rgba(10, 133, 133, 0.493);
-  }
+}
   
 .nav {
     top: 30%;

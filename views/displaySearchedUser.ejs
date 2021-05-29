@@ -19,9 +19,11 @@
     <script src="server.js"></script>
     <script src="main.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/leftsidebar.css">
+    <link rel="stylesheet" type="text/css" href="/css/searchresults.css">
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -60,6 +62,9 @@
 
     </div>
 
+    <div class = "mid-container">
+        <br>
+        <br>
     <div id="search-result-temp">
     
 
@@ -191,16 +196,18 @@
                                         }, 2500);
                                     }
                                 },
-                                error: function(response) {
-                                    alert('server error');
-                                }
-                            });
-                        }
-                    </script>
-                </ul>
+                            error: function(response) {
+                                alert('server error');
+                            }
+                        });
+                    }
+                </script>
         </div>
-        <% i++;}) %>
-            <% }%>
+        </ul>
+    <% i++;}) %>
+        <% }%>
+            </div>
+    </div>
             <script>
                 function sendMsg() {
                     const msgerInput = get(".input-message-box");
@@ -393,7 +400,7 @@
                     location.href = '/showuser?prof=' + usrEmail + '&like=' + usrlikes;
                 }
             </script>
-    </div>
+    <!-- </div> -->
             
     <div class="chat-sidebar">
                 <h3 style="text-align: center;">Match List</h3>

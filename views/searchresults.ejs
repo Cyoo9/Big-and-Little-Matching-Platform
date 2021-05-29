@@ -37,7 +37,7 @@
 
         <nav class = "nav" > 
             <ul>
-                <li class="active"><a class = "navbar-text" href="/users/dashboard">Home</a></li>
+                <li><a class = "navbar-text" href="/users/dashboard">Home</a></li>
                 <li><a class = "navbar-text" href="/users/profile">Profile</a></li>
                 <li><a class = "navbar-text" href="/users/logout">Logout</a></li>
             </ul>
@@ -245,7 +245,10 @@
         }
     </script>
 
-    <div class="mid-container">
+<!-- FIXME ** CHAT DOES NOT SHOW -->
+
+    <div id="mid-container">
+
         <div class="chat-sidebar">
             <h3 style="text-align: center;">Match List</h3>
         </div>
@@ -287,7 +290,7 @@
                 <% } else { %>
                     <div class="search-err">No user found who matches your attributes!</div>
                     <% } %>
-        </div>
+    </div>
     </div>
 </body>
 

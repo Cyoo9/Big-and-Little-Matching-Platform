@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,13 +8,15 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
     />
+    <link href="/css/login.css" rel="stylesheet" type="text/css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register</title>
 </head>
+
 <body>
-    <a href="/home">Home</a>
-    <h1>Register</h1>
+    <!-- <a href="/home">Home</a> -->
+    <h1 id = "login-title">Register</h1>
 
     <ul>
         <% if(typeof errors != 'undefined') { %>
@@ -41,7 +44,7 @@
 
         <input type="submit" value="Register" />
     </div>
-    <a href="/users/login">Already registered? Login here</a>
+    <a class =  "oauth-container" href="/users/login">Already registered? Login here</a>
     </form> 
 </body>
 </html>

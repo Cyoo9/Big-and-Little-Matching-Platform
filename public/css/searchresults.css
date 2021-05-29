@@ -1,0 +1,23 @@
+body{
+    /* line-height: 5em; */
+    font-size: 20px;
+    /* text-transform: uppercase; */
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: rgba(0, 107, 149, 0.801);
+    display: block;
+    transition: all ease-out 300ms;
+    /* columns:2;
+    column-gap: 5%;
+    column-width: 60%; */
+}
+
+.mid-container{
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    justify-content: center; */
+    margin:auto;
+    width: 40%;
+    height: 50%;
+}

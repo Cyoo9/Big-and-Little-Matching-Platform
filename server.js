@@ -47,14 +47,18 @@ app.get('/', function(req, res, next) {
     res.render('captcha');
 });
 
-app.get('/home', function(req, res) {
-    /*app.get('/', function (req, res) {
-        res.render('captcha');
-    });
-
-    app.get('/home', checkCaptchaCompleted, function (req, res) {*/
-    res.render('index');
+app.get('/users/login', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
+    res.render('login');
 });
+
+// app.get('/home', function(req, res) {
+//     /*app.get('/', function (req, res) {
+//         res.render('captcha');
+//     });
+
+//     app.get('/home', checkCaptchaCompleted, function (req, res) {*/
+//     res.render('register');
+// });
 
 
 app.post('/captcha', function(req, res) {
@@ -69,7 +73,7 @@ app.post('/captcha', function(req, res) {
     body = JSON.parse(body);
     //console.log(body);
     if(body.success) {
-        res.redirect('/home');
+        res.redirect('/users/login');
         captcha = true;
     } else {
       return res.json({"responseError" : "Failed captcha verification"});
@@ -77,10 +81,6 @@ app.post('/captcha', function(req, res) {
   });
 });
 
-
-app.get('/users/login', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
-    res.render('login');
-});
 
 app.get('/users/register', checkAuthenticated, checkCaptchaCompleted, (req, res) => {
     res.render('register');

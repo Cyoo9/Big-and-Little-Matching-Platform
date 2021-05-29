@@ -11,10 +11,12 @@
     <script src="server.js"></script>
     <script src="main.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/leftsidebar.css">
+    <link rel="stylesheet" type="text/css" href="/css/searchresults.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="jquery-3.5.1.min.js"></script>
@@ -212,25 +214,35 @@
     </script>
 
     <div id="home-temp">
-        <a href="/users/dashboard">Home</a>
-        <a href="/users/logout">Logout</a>
 
-        <h1>Hello <span id="hello-user-name">
+        <!--SIDEBAR-->
+        <div class ="sidebar">
+
+            <h1 id="hi-name">Hello, <span id="hello-user-name">
                 <%=User%>
             </span>
-        </h1>
+            !
+            </h1>
 
-        <a href="/users/profile">Profile</a>
+            <nav class = "nav" > 
+                <ul>
+                    <li class="active"><a class = "navbar-text" href="/users/dashboard">Home</a></li>
+                    <li><a class = "navbar-text" href="/users/profile">Profile</a></li>
+                    <li><a class = "navbar-text" href="/users/logout">Logout</a></li>
+                </ul>
+            </nav>
 
-        <!--SEARCH BAR-->
-        <form action="/search" method="GET" class="form-inline" id="search-form">
-            <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
-            <input type="submit" class="btn btn-primary" value="Search">
-            <div class="searchBox">
-            </div>
-        </form>
+            <!--SEARCH BAR FIXME*** -->
+            <br>
+            <form id="search-form" action="/search" method="GET" class="form-inline">
+                <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
+                <input type="submit" class="btn btn-primary" value="Search">
+                <div class="searchBox"></div>
+            </form>
+
+        </div>
+
     </div>
-
     <div class="search-table">
         <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
             <ul>

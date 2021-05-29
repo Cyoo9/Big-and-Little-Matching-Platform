@@ -5,78 +5,87 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/editprofile.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Edit Profile</title>
 </head>
 
 <body>
+    <!--SIDEBAR-->
+    <div class ="sidebar">
+
+        <nav class = "nav" > 
+            <ul>
+                <li><a class = "navbar-text" href="/users/dashboard">Home</a></li>
+                <li class="active"><a class = "navbar-text" href="/users/profile">Profile</a></li>
+                <li><a class = "navbar-text" href="/users/logout">Logout</a></li>
+            </ul>
+        </nav>
+
+    </div>
+
     <a href="/users/dashboard">Home</a>
     <a href="/users/logout">Logout</a>
 
-    <h1>Profile</h1>
-    <ul>
-        <% if(typeof errors !='undefined' ) { %>
-            <% errors.forEach(error=>{ %>
-                <li>
-                    <%= error.message %>
-                </li>
-                <% }) %>
-                    <% } %>
-    </ul>
-    
-        <div>
-            <h1>Name: <%= name%></h1>
+    <div class = "edit-profile"> 
+        
+        <h1>Edit Profile</h1>
+        <ul>
+            <% if(typeof errors !='undefined' ) { %>
+                <% errors.forEach(error=>{ %>
+                    <li>
+                        <%= error.message %>
+                    </li>
+                    <% }) %>
+                        <% } %>
+        </ul>
+        <h4>Your information: </h4>
+        <h5><b>Name:</b> <%= name%> </br>
+            <b>Big/Little:</b> <%= biglittle%> </br>
+            <b>Hobbies:</b> <%= hobbylist%> </br>
+            <b>Year:</b> <%= yr%> </br>
+            <b>Major:</b> <%= major%> </br>
+            <b>Email:</b> <%= email%> </br>
+            <b>Likes:</b> <%= numLikes %> </h5>    
+        
         </div>
-        <div>
-            <h1>Big/Little: <%= biglittle%></h1>
+
+        <div class="fill-in"> 
+
+            <form action="/users/profile/changeinfo" method="POST">
+                <h4> Update your profile: </h4>
+                <div>
+                    <input type="text" id="name" name="name" placeholder="Change Name"/>
+                </div>
+                <div>
+                    <input type="password" id="password" name="password" placeholder="Change Password"/>
+                </div>
+                <div>
+                    <input type="text" id="biglittle" name="biglittle" placeholder="Change Big/Little"/>
+                </div>
+                <div>
+                    <input type="text" id="hobbies" name="hobbies" placeholder="Change Hobbies"/>
+                </div>
+                <div>
+                    <input type="text" id="year" name="year" placeholder="Change Year"/>
+                </div>
+                <div>
+                    <input type="text" id="major" name="major" placeholder="Change Major"/>
+                </div>  
+                <div>
+                    <input type="text" id="email" name="email" placeholder="Change Email"/>
+                </div>
+                <p> To make these changes, enter your password: </p>
+                <div>
+                    <input type="passwordCurrent" id="passwordCurrent" name="passwordCurrent" placeholder="Enter Current Password" required />
+                </div>
+                <div>
+                    <input id = "savebtn" type="submit" value="Save Changes" />
+                </div>
+            </form>
+
         </div>
-        <div>
-            <h1>Hobbies: <%= hobbylist%>
-            </h1>
-        </div>
-        <div>
-            <h1>Year: <%= yr%>
-            </h1>
-        </div>
-        <div>
-            <h1>Major: <%= major%>
-            </h1>
-        </div>
-        <div>
-            <h1>Email: <%= email    %>
-            </h1>
-        </div>
-        <div>
-            <h1>Likes: <%= numLikes %>
-        <form action="/users/profile/changeinfo" method="POST">
-            <div>
-                <input type="text" id="name" name="name" placeholder="Change Name"/>
-            </div>
-            <div>
-                <input type="password" id="password" name="password" placeholder="Change Password"/>
-            </div>
-            <div>
-                <input type="text" id="biglittle" name="biglittle" placeholder="Change Big/Little"/>
-            </div>
-            <div>
-                <input type="text" id="hobbies" name="hobbies" placeholder="Change Hobbies"/>
-            </div>
-            <div>
-                <input type="text" id="year" name="year" placeholder="Change Year"/>
-            </div>
-            <div>
-                <input type="text" id="major" name="major" placeholder="Change Major"/>
-            </div>  
-            <div>
-                <input type="text" id="email" name="email" placeholder="Change Email"/>
-            </div>
-            <div>
-                <input type="passwordCurrent" id="passwordCurrent" name="passwordCurrent" placeholder="Enter Current Password" required />
-            </div>
-            <div>
-                <input type="submit" value="Save" />
-            </div>
-        </form>
 
 </body>
 

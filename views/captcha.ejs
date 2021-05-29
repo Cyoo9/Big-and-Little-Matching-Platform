@@ -4,17 +4,23 @@
     <meta charset="utf-8">
     <title>Google Recaptcha in Node.js Tutorial</title>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link href="/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="css/captchastyle.css" rel="stylesheet" type="text/css">
+   
+
 </head>
 
 <body>
-    <div>
+    <div id = "captcha-title">
         <h1>Checking in before accessing our application...</h1> 
     </div>    
     <div class="captcha-container"><br />
         <form method="POST" action="/captcha">
             <div class="g-recaptcha" data-sitekey="6LdGcdsaAAAAAHp9Ha9p2_Ht7SwyFjA3kT6KsACm"></div>
-            <button type="submit" id = "captchabutton" class="btn btn-succes">Submit</button>
+            <div id = "button-container">
+                <button id = "captchabutton" class="btn btn-success btn-md">Submit</button>
+            </div>
+            
         </form>
     <script src="https://www.google.com/recaptcha/api.js"></script>
     </div> 

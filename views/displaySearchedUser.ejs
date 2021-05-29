@@ -39,158 +39,168 @@
 
 <body onload="getLikes();">
 
-    <div id="search-result-temp">
-        <a href="/users/dashboard">Home</a>
-        <a href="/users/logout">Logout</a>
+    <!--SIDEBAR-->
+    <div class ="sidebar">
 
-        <!--SEARCH BAR-->
-        <form action="/search" method="GET" class="form-inline" id="search-form">
+        <nav class = "nav" > 
+            <ul>
+                <li class="active"><a class = "navbar-text" href="/users/dashboard">Home</a></li>
+                <li><a class = "navbar-text" href="/users/profile">Profile</a></li>
+                <li><a class = "navbar-text" href="/users/logout">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!--SEARCH BAR FIXME*** -->
+        <br>
+        <form id="search-form" action="/search" method="GET" class="form-inline">
             <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
             <input type="submit" class="btn btn-primary" value="Search">
-            <div class="searchBox">
-            </div>
+            <div class="searchBox"></div>
         </form>
+
     </div>
 
-    <!-- Modal HTML embedded directly into document -->
+    <div id="search-result-temp">
+    
 
-    <div class="userinfo-table">
-        <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
-            <ul>
-                <div class="userinfo-container">
-                    <img id="other-user-ava" width="300" height="300" style="border-radius: 50%" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
-                    <div class="userinfo-name">Name:
-                        <%=data.name%>
-                    </div>
-                    <div class="userinfo-biglittle">
-                        <%=data.biglittle%>
-                    </div>
-                    <div class="userinfo-hobbylist">Hobbies:
-                        <%=data.hobbylist%>
-                    </div>
-                    <div class="userinfo-yr">Year:
-                        <%=data.yr%>
-                    </div>
-                    <div class="userinfo-major">Major:
-                        <%=data.major%>
-                    </div>
-                    <div class="userinfo-numlikes">Likes:
-                        <%=data.numlikes%>
-                    </div>
-                    <div class="useinfo-reputation">Reputation:
-                        <%=data.reputation%>
-                    </div>
-                </div>
-                <div>
-                    <button class="like-button" value=<%=data.email%> onclick="incrementLike(this); return
-                        false">like</button>
+        <!-- Modal HTML embedded directly into document -->
 
-                    <div id="ex1" class="modal">
-                        <h3>Sweet! You matched with</h3>
-                        <h3 id="match-name">
-                            <%=data.name%>!</h3>
+        <div class="userinfo-table">
+            <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
+                <ul>
+                    <div class="userinfo-container">
+                        <img id="other-user-ava" width="300" height="300" style="border-radius: 50%" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
+                        <div class="userinfo-name">Name:
+                            <%=data.name%>
+                        </div>
+                        <div class="userinfo-biglittle">
+                            <%=data.biglittle%>
+                        </div>
+                        <div class="userinfo-hobbylist">Hobbies:
+                            <%=data.hobbylist%>
+                        </div>
+                        <div class="userinfo-yr">Year:
+                            <%=data.yr%>
+                        </div>
+                        <div class="userinfo-major">Major:
+                            <%=data.major%>
+                        </div>
+                        <div class="userinfo-numlikes">Likes:
+                            <%=data.numlikes%>
+                        </div>
+                        <div class="useinfo-reputation">Reputation:
+                            <%=data.reputation%>
+                        </div>
                     </div>
+                    <div>
+                        <button class="like-button" value=<%=data.email%> onclick="incrementLike(this); return
+                            false">like</button>
 
-                </div>
-                <script>
-                    //create a like table in sql
-                    //on page load, check if user likes user, if so display unlike, else like
-                    //create a match
+                        <div id="ex1" class="modal">
+                            <h3>Sweet! You matched with</h3>
+                            <h3 id="match-name">
+                                <%=data.name%>!</h3>
+                        </div>
 
-                    function getLikes() {
-                        console.log("GETTING LIKE BUTTON STATUS");
-                        $.ajax({
-                            dataType: 'json',
-                            data: {
-                                email: document.getElementsByClassName('like-button')[0].value
-                            },
-                            type: 'GET',
-                            url: "/getlikes",
-                            success: function(response) {
-                                if (response >= 1) {
-                                    document.getElementsByClassName('like-button')[0].innerHTML = "unlike";
-                                    console.log("Button status: Unlike");
-                                } else {
-                                    document.getElementsByClassName('like-button')[0].innerHTML = "like";
-                                    console.log("Button status: Like");
+                    </div>
+                    <script>
+                        //create a like table in sql
+                        //on page load, check if user likes user, if so display unlike, else like
+                        //create a match
+
+                        function getLikes() {
+                            console.log("GETTING LIKE BUTTON STATUS");
+                            $.ajax({
+                                dataType: 'json',
+                                data: {
+                                    email: document.getElementsByClassName('like-button')[0].value
+                                },
+                                type: 'GET',
+                                url: "/getlikes",
+                                success: function(response) {
+                                    if (response >= 1) {
+                                        document.getElementsByClassName('like-button')[0].innerHTML = "unlike";
+                                        console.log("Button status: Unlike");
+                                    } else {
+                                        document.getElementsByClassName('like-button')[0].innerHTML = "like";
+                                        console.log("Button status: Like");
+                                    }
+                                },
+                                error: function(response) {
+                                    alert('server error');
                                 }
-                            },
-                            error: function(response) {
-                                alert('server error');
-                            }
-                        });
-                    }
+                            });
+                        }
 
-                    //increments like
-                    function incrementLike(obj) {
-                        if (document.getElementsByClassName('like-button')[0].innerHTML == "like") {
-                            document.getElementsByClassName('like-button')[0].innerHTML = "unlike";
+                        //increments like
+                        function incrementLike(obj) {
+                            if (document.getElementsByClassName('like-button')[0].innerHTML == "like") {
+                                document.getElementsByClassName('like-button')[0].innerHTML = "unlike";
+                                $.ajax({
+                                    dataType: 'json',
+                                    data: {
+                                        email: obj.value
+                                    },
+                                    type: 'GET',
+                                    url: "/showuser/like"
+                                });
+                                setTimeout(function() {
+                                    checkMatch();
+                                }, 100);
+
+                            } else {
+                                decrementLike(obj);
+                            }
+                        }
+
+                        //decrement likes
+                        function decrementLike(obj) {
                             $.ajax({
                                 dataType: 'json',
                                 data: {
                                     email: obj.value
                                 },
                                 type: 'GET',
-                                url: "/showuser/like"
+                                url: "/showuser/unlike"
                             });
+                            document.getElementsByClassName('like-button')[0].innerHTML = "like";
                             setTimeout(function() {
-                                checkMatch();
+                                location.reload()
                             }, 100);
-
-                        } else {
-                            decrementLike(obj);
                         }
-                    }
 
-                    //decrement likes
-                    function decrementLike(obj) {
-                        $.ajax({
-                            dataType: 'json',
-                            data: {
-                                email: obj.value
-                            },
-                            type: 'GET',
-                            url: "/showuser/unlike"
-                        });
-                        document.getElementsByClassName('like-button')[0].innerHTML = "like";
-                        setTimeout(function() {
-                            location.reload()
-                        }, 100);
-                    }
-
-                    //checks for match
-                    function checkMatch() {
-                        console.log("Checking for match...");
-                        var xhr = $.ajax({
-                            dataType: 'json',
-                            data: {
-                                email: document.getElementsByClassName('like-button')[0].value
-                            },
-                            type: 'GET',
-                            url: "/checkmatch",
-                            success: function(response) {
-                                console.log("finished checking");
-                                console.log(response);
-                                if (parseInt(response) >= 1) {
-                                    console.log("MATCHED!");
-                                    $('#ex1').modal("show");
-                                    setTimeout(function() {
-                                        $('#ex1').modal('hide')
-                                        location.reload()
-                                    }, 2500);
+                        //checks for match
+                        function checkMatch() {
+                            console.log("Checking for match...");
+                            var xhr = $.ajax({
+                                dataType: 'json',
+                                data: {
+                                    email: document.getElementsByClassName('like-button')[0].value
+                                },
+                                type: 'GET',
+                                url: "/checkmatch",
+                                success: function(response) {
+                                    console.log("finished checking");
+                                    console.log(response);
+                                    if (parseInt(response) >= 1) {
+                                        console.log("MATCHED!");
+                                        $('#ex1').modal("show");
+                                        setTimeout(function() {
+                                            $('#ex1').modal('hide')
+                                            location.reload()
+                                        }, 2500);
+                                    }
+                                },
+                                error: function(response) {
+                                    alert('server error');
                                 }
-                            },
-                            error: function(response) {
-                                alert('server error');
-                            }
-                        });
-                    }
-                </script>
-    </div>
-    </ul>
-    <% i++;}) %>
-        <% }%>
-            </div>
+                            });
+                        }
+                    </script>
+                </ul>
+        </div>
+        <% i++;}) %>
+            <% }%>
             <script>
                 function sendMsg() {
                     const msgerInput = get(".input-message-box");
@@ -383,12 +393,13 @@
                     location.href = '/showuser?prof=' + usrEmail + '&like=' + usrlikes;
                 }
             </script>
-
-            <div class="chat-sidebar">
+    </div>
+            
+    <div class="chat-sidebar">
                 <h3 style="text-align: center;">Match List</h3>
-            </div>
+    </div>
 
-            <div class="popup-chat chat-popup" id="yolo">
+    <div class="popup-chat chat-popup" id="yolo">
                 <div class="popup-chat-header">
                     <div class="popup-chat-header-left" style="cursor: pointer;" onclick="getUserProfile();">
                     </div>
@@ -401,7 +412,8 @@
                         <form class="input-container" onsubmit="sendMsg(); return false"><input type="text" class="input-message-box" placeholder="Enter your message..."><button type="submit" class="input-send-button">Send</button></form>
                     </section>
                 </div>
-            </div>
+    </div>
+
 </body>
 
 </html>

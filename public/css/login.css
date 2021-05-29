@@ -1,0 +1,44 @@
+html { 
+    background: url(images/bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: rgb(184, 255, 166); /* For browsers that do not support gradients */
+    background-image: linear-gradient(to bottom right, rgb(184, 255, 166), rgb(104, 107, 255));
+}
+
+a{
+    font-size: 20px;
+}
+
+body {
+    margin: auto;
+    margin-top: 10%;
+    width: 20%;
+    background-color: rgba(0, 0, 0, 0.226);
+    padding: 3%;
+}
+
+#login-button{
+    background-color: rgba(59, 214, 72, 0.616);
+    font-size: 12px;
+    color: white;
+    border-color: rgba(12, 31, 20, 0.123);
+}
+
+#login-title{
+    font-weight: bold;
+    color:rgb(255, 255, 255);
+}
+
+.oauth-container{
+    color: rgb(247, 245, 255);
+}
+
+#prompt1 {
+    margin:0%;
+    padding: 0%;
+    font-size: 19px;
+    color: rgba(53, 52, 52, 0.733);
+}

@@ -1,0 +1,66 @@
+body{
+    /* line-height: 5em; */
+    font-size: 20px;
+    /* text-transform: uppercase; */
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: rgba(0, 107, 149, 0.801);
+    display: block;
+    transition: all ease-out 300ms;
+    column-count: 2;
+    column-gap: 5%;
+    column-width: 60%;
+}
+
+.edit-profile {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+    margin-left: 80%;
+    margin-top: 12%;
+    margin-bottom: 0%;
+    width: 40%;
+    height: 50%;
+}
+
+.edit-profile h5 {
+    color: rgba(0, 0, 0, 0.671);
+    margin: 0%;
+    display: inline;
+}
+
+.fill-in {
+    display: flex;
+    flex-direction: column;
+    align-items:flex-end;
+    justify-content: center;
+    height: 100%;
+    margin-top: 38%;
+    margin-right: 40%;
+}
+
+.fill-in p{
+    text-decoration: none;
+    font-size: 13px;
+    margin-bottom: 0%;
+    margin-top: 7%;
+    color: black;
+    letter-spacing: normal;
+}
+
+.fill-in h5 {
+    align-items: flex-start;
+    margin-left: 0%;
+}
+
+#passwordCurrent{
+    width: 70%;
+    padding: 5px 10px;
+    margin: 8px 0;
+}
+
+#savebtn {
+    background-color: rgba(100, 193, 255, 0.534);
+    margin-top: 3%;
+}

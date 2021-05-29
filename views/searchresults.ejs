@@ -11,9 +11,11 @@
     <script src="server.js"></script>
     <script src="main.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/leftsidebar.css">
+    <link rel="stylesheet" type="text/css" href="/css/searchresults.css">
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -29,6 +31,28 @@
 </head>
 
 <body>
+
+    <!--SIDEBAR-->
+    <div class ="sidebar">
+
+        <nav class = "nav" > 
+            <ul>
+                <li class="active"><a class = "navbar-text" href="/users/dashboard">Home</a></li>
+                <li><a class = "navbar-text" href="/users/profile">Profile</a></li>
+                <li><a class = "navbar-text" href="/users/logout">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!--SEARCH BAR FIXME*** -->
+        <br>
+        <form id="search-form" action="/search" method="GET" class="form-inline">
+            <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
+            <input type="submit" class="btn btn-primary" value="Search">
+            <div class="searchBox"></div>
+        </form>
+
+    </div>
+
     <script>
         function sendMsg() {
             const msgerInput = get(".input-message-box");
@@ -221,63 +245,50 @@
         }
     </script>
 
-    <div class="chat-sidebar">
-        <h3 style="text-align: center;">Match List</h3>
-    </div>
+    <div class="mid-container">
+        <div class="chat-sidebar">
+            <h3 style="text-align: center;">Match List</h3>
+        </div>
 
-    <div class="popup-chat chat-popup" id="yolo">
-        <div class="popup-chat-header">
-            <div class="popup-chat-header-left" style="cursor: pointer;" onclick="getUserProfile();">
+        <div class="popup-chat chat-popup" id="yolo">
+            <div class="popup-chat-header">
+                <div class="popup-chat-header-left" style="cursor: pointer;" onclick="getUserProfile();">
+                </div>
+                <div class="popup-chat-header-right"><a href="javascript:close_popup(yolo);">x</a></div>
+                <div style="clear: both"></div>
             </div>
-            <div class="popup-chat-header-right"><a href="javascript:close_popup(yolo);">x</a></div>
-            <div style="clear: both"></div>
+            <div class="popup-chat-messages">
+                <section class="chat-room">
+                    <main class="chat-box"></main>
+                    <form class="input-container" onsubmit="sendMsg(); return false"><input type="text" class="input-message-box" placeholder="Enter your message..."><button type="submit" class="input-send-button">Send</button></form>
+                </section>
+            </div>
         </div>
-        <div class="popup-chat-messages">
-            <section class="chat-room">
-                <main class="chat-box"></main>
-                <form class="input-container" onsubmit="sendMsg(); return false"><input type="text" class="input-message-box" placeholder="Enter your message..."><button type="submit" class="input-send-button">Send</button></form>
-            </section>
+
+        <div class="search-table">
+            <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
+            <ul>
+                <div class="search-container">
+                    <a href="/showuser?prof=<%=data.email%>&like=<%=data.numlikes%>" style="text-decoration: none; color: black" method="GET">
+                        <img id="search-container-img" width="100" height="100" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
+                        <div class="search-name">Name:
+                            <%=data.name%>
+                        </div>
+                        <div class="search-biglittle">
+                            <%=data.biglittle%>
+                        </div>
+                        <div class="search-year">Year:
+                            <%=data.yr%>
+                        </div>
+                    </a>
+                </div>
+            </ul>
+            <% i++;}) %>
+                <% } else { %>
+                    <div class="search-err">No user found who matches your attributes!</div>
+                    <% } %>
         </div>
     </div>
-</body>
-
-<div id="search-result-temp">
-    <a href="/users/dashboard">Home</a>
-    <a href="/users/logout">Logout</a>
-
-
-    <!--SEARCH BAR-->
-    <form action="/search" method="GET" class="form-inline" id="search-form">
-        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
-        <input type="submit" class="btn btn-primary" value="Search">
-        <div class="searchBox">
-        </div>
-    </form>
-</div>
-
-<div class="search-table">
-    <% if(userData.length !=0) { var i=1; userData.forEach(function(data) { %>
-        <ul>
-            <div class="search-container">
-                <a href="/showuser?prof=<%=data.email%>&like=<%=data.numlikes%>" style="text-decoration: none; color: black" method="GET">
-                    <img id="search-container-img" width="100" height="100" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
-                    <div class="search-name">Name:
-                        <%=data.name%>
-                    </div>
-                    <div class="search-biglittle">
-                        <%=data.biglittle%>
-                    </div>
-                    <div class="search-year">Year:
-                        <%=data.yr%>
-                    </div>
-                </a>
-            </div>
-        </ul>
-        <% i++;}) %>
-            <% } else { %>
-                <div class="search-err">No user found who matches your attributes!</div>
-                <% } %>
-</div>
 </body>
 
 </html>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 :root {
     --body-bg: white;
     --msger-bg: white;
@@ -22,6 +24,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: lightcyan;
     background-image: var(--body-bg);
 }
 
@@ -128,16 +131,23 @@ body {
 }
 
 .chat-sidebar {
-    width: 200px;
+    width: 300px;
     position: fixed;
     height: 80%;
     padding-top: 15px;
     padding-bottom: 15px;
-    right: 1%;
+    right: 5%;
     bottom: 10%;
-    border-radius: 14px;
-    border: 1px solid grey;
-    background-color: white;
+    /* border-radius: 14px; */
+    border: 2px solid rgba(0, 120, 131, 0.466);
+    background-color: rgba(255, 255, 255, 0.527);
+}
+
+.chat-sidebar h3 {
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.4em;
+    color: rgba(0, 75, 105, 0.801);
 }
 
 .sidebar-name {
@@ -267,30 +277,34 @@ body {
 }
 
 .search-table {
-    padding: 40px;
+    padding-top: 5%;
+    padding-left: 28%;
+    padding-right: 20%;
     display: grid;
     grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto auto auto;
     grid-gap: 10px;
     max-height: 70%;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 .search-container {
     width: 300px;
     font-size: 16px;
-    border-radius: 14px;
+    /* border-radius: 14px; */
     border-style: solid;
     border-width: 1px;
-    border-color: grey;
+    border-color: rgba(255, 255, 255, 0.815);
     padding: 30px;
-    background-image: linear-gradient(cyan, lightgreen);
+    background-image: linear-gradient(rgb(255, 255, 255), rgba(1, 66, 71, 0.479));
     -webkit-transition: background 2s;
     /* For Safari 3.0 to 6.0 */
     transition: background 2s
 }
 
 .search-container:hover {
-    box-shadow: 0 5px 15px purple;
+    box-shadow: 0 5px 15px rgb(0, 217, 255);
     animation: search-container 1s infinite;
     animation-timing-function: linear;
 }
@@ -301,10 +315,10 @@ body {
     }
     50% {
         transform: scale(1.1);
-        100% {
-            transform: scale(1);
-        }
     }
+    100% {
+        transform: scale(1);
+    } /* CHANGED FROM WITHIN 50 */
 }
 
 #search-container-img {
@@ -335,6 +349,7 @@ body {
 
 /*Dashboard - contains logout, home, profile, search bar, hello msg --- feel free to change its only temporally*/
 
+/* DESIGN REFERENCE: https://codepen.io/sreisner/pen/KazJmO */
 #home-temp {
     position: absolute;
     top: 0;
@@ -379,4 +394,84 @@ body {
 
 #match-name {
     font-weight: bold;
+}
+
+/* LEFT SIDEBAR */
+
+#hi-name {
+    padding: 5%;
+    font-size: 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.4em;
+    color:rgba(0, 68, 68, 0.527);
+}
+
+.sidebar {
+    position: fixed;
+    width: 25%;
+    height: 100vh;
+    background: lightcyan;
+    color: rgb(1, 71, 71);
+    font-size: 0.65em;
+    border-right: solid 2px rgba(10, 133, 133, 0.493);
+  }
+  
+.nav {
+    top: 30%;
+    padding-top: 20%;
+    position: relative;
+    margin: 0 15%;
+    text-align: right;
+    transform: translateY(-50%);
+    font-weight: bold;
+}
+  
+.nav ul {
+    list-style: none;
+}
+    
+li {
+    position: relative;
+    margin: 4em 0;
+}
+  
+#search-form{
+    padding-left: 10%;
+    padding-top: 60%;
+}
+
+a {
+    font-size: 20px;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.4em;
+    color: rgba(rgb(102, 212, 255), 0.35);
+    display: block;
+    transition: all ease-out 300ms;
+    color:rgba(0, 68, 68, 0.527)
+}
+
+  
+.active a {
+    color: rgb(1, 100, 100);
+}
+  
+a:not(.active)::after {
+    opacity: 0.2;
+}
+  
+a:not(.active):hover a {
+    color: rgba(#FFF, 0.75);
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0.2em;
+    background: black;
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(to right, rgb(1, 126, 126), rgba(255, 255, 255, 0.986))
 }

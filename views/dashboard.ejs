@@ -202,7 +202,7 @@
             element = document.getElementsByClassName("popup-chat-header-left");
             element[0].innerHTML = name;
             usrEmail = email;
-            usrName = document.getElementById('hello-user-name').innerHTML;
+            usrName = document.getElementById('get-chat-name').innerHTML;
             getMsg(email);
             //setInterval(function () { getMsg(email) }, 500);
         }
@@ -219,7 +219,10 @@
 
             <h1 id="hi-name">Hello, <span id="hello-user-name">
                <b> <%=User%>!</b>
-            </span>
+                </span>
+            </h1>
+            <h1 id="get-chat-name" style="display: none;">
+                <%=User%>
             </h1>
 
             <nav class="nav">

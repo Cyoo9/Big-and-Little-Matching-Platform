@@ -463,8 +463,8 @@ body {
 .nav ul {
     list-style: none;
 }
-
-li {
+    
+.nav li {
     position: relative;
     margin: 4em 0;
 }
@@ -502,7 +502,7 @@ a:not(.active):hover a {
     color: rgba(#FFF, 0.75);
 }
 
-a::after {
+.nav a::after {
     content: '';
     position: absolute;
     width: 100%;

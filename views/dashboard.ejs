@@ -202,7 +202,7 @@
             element = document.getElementsByClassName("popup-chat-header-left");
             element[0].innerHTML = name;
             usrEmail = email;
-            usrName = document.getElementById('hello-user-name').innerHTML;
+            usrName = document.getElementById('get-chat-name').innerHTML;
             getMsg(email);
             //setInterval(function () { getMsg(email) }, 500);
         }
@@ -215,18 +215,21 @@
     <div id="home-temp">
 
         <!--SIDEBAR-->
-        <div class ="sidebar">
+        <div class="sidebar">
 
             <h1 id="hi-name">Hello, <span id="hello-user-name">
                <b> <%=User%>!</b>
-            </span>
+                </span>
+            </h1>
+            <h1 id="get-chat-name" style="display: none;">
+                <%=User%>
             </h1>
 
-            <nav class = "nav" > 
+            <nav class="nav">
                 <ul>
-                    <li class="active"><a class = "navbar-text" href="/users/dashboard">Home</a></li>
-                    <li><a class = "navbar-text" href="/users/profile">Profile</a></li>
-                    <li><a class = "navbar-text" href="/users/logout">Logout</a></li>
+                    <li class="active"><a class="navbar-text" href="/users/dashboard">Home</a></li>
+                    <li><a class="navbar-text" href="/users/profile">Profile</a></li>
+                    <li><a class="navbar-text" href="/users/logout">Logout</a></li>
                 </ul>
             </nav>
 
@@ -271,9 +274,11 @@
 
     <div class="popup-chat chat-popup" id="yolo">
         <div class="popup-chat-header">
-            <div class="popup-chat-header-left" style="cursor: pointer;" onclick="getUserProfile();">
+            <img id="popup-chat-img" style="cursor: pointer;" onclick="getUserProfile();" width="30" height="30" src="https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png" />
+            <div class="popup-chat-header-left">
             </div>
-            <div class="popup-chat-header-right"><a href="javascript:close_popup(yolo);">x</a></div>
+            <div class="popup-chat-header-right">
+                <a href="javascript:close_popup(yolo);">x</a></div>
             <div style="clear: both"></div>
         </div>
         <div class="popup-chat-messages">

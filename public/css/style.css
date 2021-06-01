@@ -507,8 +507,6 @@ a::after {
     position: absolute;
     width: 100%;
     height: 0.2em;
-    background: black;
     left: 0;
     bottom: 0;
-    background-image: linear-gradient(to right, rgb(1, 126, 126), rgba(255, 255, 255, 0.986))
 }

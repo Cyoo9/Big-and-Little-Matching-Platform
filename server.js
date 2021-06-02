@@ -22,11 +22,6 @@ const PORT = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static(__dirname + '/public'));
-
-
-//app.use(express.static(__dirname + '/public'));
-
 app.use(
     session({
         secret: 'secret',
@@ -37,11 +32,11 @@ app.use(
     })
 );
 
-//app.use(express.static(__dirname + './public/css'));
 
 app.use(passport.initialize());
 app.use(passport.session())
 app.use(flash());
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res, next) {
     res.render('captcha');

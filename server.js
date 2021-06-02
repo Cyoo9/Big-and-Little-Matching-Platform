@@ -657,13 +657,13 @@ app.get('/showuser/unlike', function(req, res) {
             numLikes = results.rows[0].numlikes;
             numLikes--;
 
-            if (numLikes == 5) {
+            if (numLikes == 2) {
                 reputation = "Gaining Attraction"
             }
-            if (numLikes == 10) {
+            if (numLikes == 3) {
                 reputation = "Popular"
             }
-            if (numLikes >= 15) {
+            if (numLikes >= 4) {
                 reputation = "Very Popular"
             }
 

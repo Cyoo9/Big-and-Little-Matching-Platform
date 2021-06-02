@@ -8,14 +8,14 @@ Express framework with PostgreSQL database were used for the back-end.
 Javascript ejs used for templating. 
 
 How to run:
-1. Create a postgres server with the following information:
-    a. user: postgresql
-    b. password: password(make sure root user(postgresql) password is password)
-    c. localhost: 5432
-    d. database name: dbase
-2. Copy and paste the code from queries.sql file(EXCEPT THE COMMENTED CODE AT THE BOTTOM), into psql shell to create the tables.
-3. Run node server.js in the commandline
-4. Enter 127.0.0.1:3000/ in the web browser to access our site.
+-  Create a postgres server with the following information:
+    1. user: postgresql
+    2. password: password(make sure root user(postgresql) password is password)
+    3. localhost: 5432
+    4. database name: dbase
+-  Copy and paste the code from queries.sql file(EXCEPT THE COMMENTED CODE AT THE BOTTOM), into psql shell to create the tables.
+-  Run node server.js in the commandline
+-  Enter 127.0.0.1:3000/ in the web browser to access our site.
 
 Features/Functions:
 
@@ -58,5 +58,5 @@ Messaging:
 - Users can click on their match profile picture to view more of their match information.
 
 Database:
--We used postgresql as our database.
--We implemented indexes BTREES for slight performance gains when using the GET method.
+-  We used postgresql as our database.
+-  We implemented indexes BTREES for slight performance gains when using the GET method.

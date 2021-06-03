@@ -9,13 +9,15 @@ Javascript ejs used for templating.
 
 How to run:
 -  Create a postgres server with the following information:
-    1. user: postgresql
-    2. password: password(make sure root user(postgresql) password is password)
-    3. localhost: 5432
-    4. database name: dbase
--  Copy and paste the code from queries.sql file(EXCEPT THE COMMENTED CODE AT THE BOTTOM), into psql shell to create the tables.
--  Run node server.js in the commandline
--  Enter 127.0.0.1:3000/ in the web browser to access our site.
+    1. user: pjdhybmqyktzdi
+    2. password: d0669e368ec16f0076bb2953e7fabdf6adc9db7c75cd63272432f4db37a0894e
+    3. host: ec2-34-195-233-155.compute-1.amazonaws.com
+    4. database name: dapbrp5btf89rj
+    5. port: 5432
+-  Go to https://big-little-matching.herokuapp.comin to access our site
+-  Type the code below in your terminal to enter queries into our database. 
+-  psql --host=<host> --port=<port> --username=<username> --password=<password> --dbname=<database name> 
+-  When prompted the password, enter the password above. 
 
 Features/Functions:
 

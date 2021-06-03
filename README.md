@@ -16,7 +16,7 @@ How to run:
     5. port: 5432
 -  Go to https://big-little-matching.herokuapp.comin to access our site
 -  Type the code below in your terminal to enter queries into our database. 
--  psql --host=<host> --port=<port> --username=<username> --password=<password> --dbname=<database name> 
+-  psql --host=ec2-34-195-233-155.compute-1.amazonaws.com --port=5432 --username=pjdhybmqyktzdi --password=d0669e368ec16f0076bb2953e7fabdf6adc9db7c75cd63272432f4db37a0894e--dbname=dapbrp5btf89rj 
 -  When prompted the password, enter the password above. 
 
 Features/Functions:

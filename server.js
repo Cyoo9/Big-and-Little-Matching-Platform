@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
-const { pool } = require("./dbConfig");
+const { client } = require("./dbConfig");
+const pool = client;
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require("passport");
 const request = require('request');
+
 
 //links to css file
 
@@ -60,7 +62,7 @@ app.post('/captcha', function(req, res) {
     if (req.body === undefined || req.body === '' || req.body === null) {
         return res.json({ "responseError": "captcha error" });
     }
-    var secretKey = "6LdGcdsaAAAAAP6CFbVhB5E92nyuNmlDTvz049L8";
+    var secretKey = "6LeANwgbAAAAAIqqWA2t9pnpsZEvyPR0uxRGOzCz";
 
     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.socket.remoteAddress;
     request(verificationURL, function(error, response, body) {
@@ -167,6 +169,13 @@ app.post('/users/profile/changeinfo/', checkNotAuthenticated, async(req, res) =>
         hashedPassword = await bcrypt.hash(req.body.passwordCurrent, 10);
     } else {
         hashedPassword = await bcrypt.hash(req.body.password, 10);
+    }
+
+     if (googleUser == true) {
+        email = userProfile.emails[0].value;
+    }
+    if (googleUser == false) {
+        email = User.email;
     }
 
     /*let errors = [];
@@ -295,7 +304,7 @@ app.post('/users/login',
     passport.authenticate('local', {
         successRedirect: "/users/dashboard",
         failureRedirect: "/users/login",
-        failureFlash: true
+        failureFlash: true, 
     })
 );
 
@@ -371,7 +380,7 @@ const GOOGLE_CLIENT_SECRET = "q0ij5zfoUX-QeJx3QfbX9fYw";
 passport2.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/auth/google/callback"
+        callbackURL: "https://big-little-matching.herokuapp.com/auth/google/callback"
     },
     function(accessToken, refreshToken, profile, done) {
         userProfile = profile;
@@ -379,7 +388,7 @@ passport2.use(new GoogleStrategy({
         var name = userProfile.displayName;
         var email = userProfile.emails[0].value;
         userProfile.id = 100; //dont remove need it
-
+ 
         //console.log(userProfile.id); //comment this out when finished
         //console.log(token); //comment this out when finished
 
@@ -562,13 +571,13 @@ app.get('/showuser/like', function(req, res) {
             numLikes = results.rows[0].numlikes;
             numLikes++;
 
-            if (numLikes == 5) {
+            if (numLikes == 2) {
                 reputation = "Gaining Attraction"
             }
-            if (numLikes == 10) {
+            if (numLikes == 3) {
                 reputation = "Popular"
             }
-            if (numLikes >= 15) {
+            if (numLikes >= 4) {
                 reputation = "Very Popular"
             }
 

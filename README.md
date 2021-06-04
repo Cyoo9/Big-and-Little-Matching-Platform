@@ -7,17 +7,7 @@ Javascript, HTML, and CSS were used for the front-end.
 Express framework with PostgreSQL database were used for the back-end. 
 Javascript ejs used for templating. 
 
-How to run:
--  Create a postgres server with the following information:
-    1. user: pjdhybmqyktzdi
-    2. password: d0669e368ec16f0076bb2953e7fabdf6adc9db7c75cd63272432f4db37a0894e
-    3. host: ec2-34-195-233-155.compute-1.amazonaws.com
-    4. database name: dapbrp5btf89rj
-    5. port: 5432
--  Go to https://big-little-matching.herokuapp.comin to access our site
--  Type the code below in your terminal to enter queries into our database. 
--  psql --host=ec2-34-195-233-155.compute-1.amazonaws.com --port=5432 --username=pjdhybmqyktzdi --password=d0669e368ec16f0076bb2953e7fabdf6adc9db7c75cd63272432f4db37a0894e --dbname=dapbrp5btf89rj 
--  When prompted the password, enter the password above. 
+Go to https://big-little-matching.herokuapp.comin to access our site
 
 Features/Functions:
 

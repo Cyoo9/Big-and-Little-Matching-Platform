@@ -7,7 +7,7 @@ Javascript, HTML, and CSS were used for the front-end.
 Express framework with PostgreSQL database were used for the back-end. 
 Javascript ejs used for templating. 
 
-Go to https://big-little-matching.herokuapp.comin to access our site
+Go to https://big-little-matching.herokuapp.com to access our site
 
 Features/Functions:
 
